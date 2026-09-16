@@ -153,6 +153,24 @@
     padding: 12px; box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
   }
   .guess-box label { margin: 0 0 8px; }
+  .city-region {
+    font-size: 0.86em;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin-left: 6px;
+    color: inherit;
+    opacity: 0.82;
+  }
+  .suggestions li .city-region {
+    color: var(--muted);
+    opacity: 1;
+  }
+  .log li.heat-freezing .city-region,
+  .log li.heat-cold .city-region,
+  .heat-banner.heat-freezing .city-region,
+  .heat-banner.heat-cold .city-region {
+    opacity: 0.9;
+  }
   .guess-box input {
     font-size: 16px;
     -webkit-user-select: text; user-select: text;
@@ -476,6 +494,92 @@
     background: var(--paper2); text-align: center;
   }
   .end-bar p { margin: 0 0 8px; font-size: 15px; }
+
+  /* Desktop: wider paper column; map stays stacked under the receipt */
+  @media (min-width: 900px) {
+    body { padding: 28px 24px; }
+    .frame {
+      max-width: 720px;
+      padding: 36px 40px 56px;
+      border-radius: 14px;
+    }
+    h1 { font-size: 52px; }
+    .map-panel .map-frame { height: 280px; }
+    .results-stage { max-width: 480px; }
+    .results-sheet { padding: 28px 22px 24px; }
+    .results-headline { font-size: 32px; }
+    .results-sheet .share { font-size: 13px; }
+  }
+  .map-panel {
+    margin: 20px 0 4px;
+    border: 1px solid #d8c7a8;
+    border-left: 5px solid var(--tip);
+    border-radius: 2px 8px 8px 2px;
+    background: linear-gradient(180deg, #fff8ea, #f3e8d4);
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .map-panel .map-kicker {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--tip);
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin: 12px 14px 6px;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+  }
+  .map-panel .map-caption {
+    margin: 0 14px 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .map-panel .map-frame {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #d8c7a8;
+    border-radius: 0;
+    overflow: hidden;
+    background: #efe6d4;
+    height: 220px;
+    position: relative;
+  }
+  .map-panel #guessMap {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  .map-panel .leaflet-container {
+    font: 11px/1.3 ui-sans-serif, system-ui, sans-serif;
+    background: #efe6d4;
+  }
+  /* Keep required map credit tiny so it doesn't dominate */
+  .map-panel .leaflet-control-attribution {
+    background: rgba(247, 241, 228, 0.82) !important;
+    color: #9a9080 !important;
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    padding: 2px 5px !important;
+    max-width: 70%;
+    box-shadow: none !important;
+    border: 0 !important;
+  }
+  .map-panel .leaflet-control-attribution a {
+    color: #8a7f6e !important;
+    text-decoration: none !important;
+  }
+  .map-panel .leaflet-control-zoom a {
+    background: var(--cream) !important;
+    color: var(--ink) !important;
+    border-color: #cbb996 !important;
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+  }
   @media (max-width: 640px) {
     body { padding: 0; }
     .frame { border-radius: 0; min-height: 100dvh; padding: 20px 16px 28px; }
@@ -502,6 +606,8 @@
     .results-sheet .replay-print { min-height: 48px; }
   }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 <div class="frame" id="mainFrame">
@@ -523,7 +629,7 @@
     <p>One tip from the local paper. One receipt, converted to USD. The mystery city could be <strong>anywhere in the world</strong>.</p>
     <p>You start with a <strong>convenience-store run</strong> from the mystery city — snacks, drinks, everyday shelf stuff.</p>
     <p>Two wrong guesses and the tab becomes <strong>lunch</strong>. Two more and it becomes <strong>dinner with a drink</strong>.</p>
-    <p><strong>Guess the city.</strong> Six tries. Hotter or colder. No map.</p>
+    <p><strong>Guess the city.</strong> Six tries. Hotter or colder. The map follows <em>your</em> guesses — never the answer.</p>
     <p>Every price is shown in USD so cities stay comparable.</p>
     <button class="go" type="button" id="helpClose">Open today's paper</button>
   </div>
@@ -1804,7 +1910,7 @@ const DAYS = {
   },
 };
 
-const KEY = "register-v5";
+const KEY = "register-v6";
 const SB_URL = "https://iaurnwcjipzergycbqfp.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhdXJud2NqaXB6ZXJneWNicWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzOTc0NTYsImV4cCI6MjEwNDk3MzQ1Nn0.qHCkDyKdWLDtmu0ixqarRZLlf4-cWRWfT6qWH26ryDU";
 function playerId() {
@@ -1878,6 +1984,18 @@ function dist(a, b) {
   const dLat = toR(b[0] - a[0]), dLon = toR(b[1] - a[1]);
   const s = Math.sin(dLat/2)**2 + Math.cos(toR(a[0])) * Math.cos(toR(b[0])) * Math.sin(dLon/2)**2;
   return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+
+function cityRegion(entryOrName) {
+  if (Array.isArray(entryOrName)) return entryOrName[3] || "";
+  const hit = CITIES.find(c => c[0] === entryOrName);
+  return hit && hit[3] ? hit[3] : "";
+}
+function cityLabel(name, region) {
+  const r = region || cityRegion(name);
+  if (!r) return name;
+  return name + ' <span class="city-region">(' + r + ')</span>';
 }
 
 function findCity(name) {
@@ -1975,6 +2093,15 @@ function shareText() {
 const DAY = todayKey();
 const P = DAYS[DAY];
 const num = DAY.slice(8);
+if (/[?&]reset=1(?:&|$)/.test(location.search || "")) {
+  try {
+    localStorage.removeItem(KEY);
+    localStorage.removeItem("register-v5");
+    localStorage.removeItem("register-print-seen-v4-" + DAY);
+    localStorage.removeItem("register-print-seen-v6-" + DAY);
+  } catch (e) {}
+  location.replace(location.href.split("?")[0]);
+}
 let state = loadState(DAY);
 let resultsOpen = false;
 let justGuessed = false;
@@ -2035,7 +2162,7 @@ function heatBannerHTML(g, pulse) {
   const h = g.ok ? { t: "You got it", key: "ok" } : heat(g.km);
   const pulseCls = pulse ? " pulse" : "";
   return `<div class="heat-banner heat-${h.key}${pulseCls}" id="heatBanner">
-    <div class="hb-city">${g.name}</div>
+    <div class="hb-city">${g.name}<span class="city-region">(${g.region || cityRegion(g.name)})</span></div>
     <div class="hb-word">${h.t}</div>
     <div class="hb-dist">${g.ok ? "That's the city" : fmtMi(g.km) + " away"}</div>
   </div>`;
@@ -2105,7 +2232,7 @@ function renderResults() {
 }
 
 function printSeenKey() {
-  return "register-print-seen-v4-" + DAY;
+  return "register-print-seen-v6-" + DAY;
 }
 function hasSeenPrint() {
   try { return !!localStorage.getItem(printSeenKey()); } catch (e) { return false; }
@@ -2336,6 +2463,66 @@ function hideResults() {
   render();
 }
 
+
+let guessMap = null;
+let guessMarker = null;
+
+function cityCoords(name) {
+  const hit = CITIES.find(c => c[0] === name);
+  if (!hit) return null;
+  return [hit[1], hit[2]];
+}
+
+function updateGuessMap() {
+  const el = document.getElementById('guessMap');
+  const caption = document.getElementById('mapCaption');
+  if (!el || typeof L === 'undefined') return;
+
+  // DOM is rebuilt every render(), so recreate the Leaflet map
+  guessMap = L.map(el, {
+    scrollWheelZoom: true,
+    zoomControl: true,
+    attributionControl: false
+  });
+  // Esri light canvas + reference labels (major cities appear as you zoom)
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '',
+    maxZoom: 16
+  }).addTo(guessMap);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '',
+    maxZoom: 16,
+    opacity: 0.95
+  }).addTo(guessMap);
+
+  let label = null;
+  if (state.done) label = P.city;
+  else if (state.guesses && state.guesses.length) label = state.guesses[state.guesses.length - 1].name;
+
+  const ll = label ? cityCoords(label) : null;
+  if (ll) {
+    guessMap.setView(ll, state.done ? 11 : 10);
+    guessMarker = L.circleMarker(ll, {
+      radius: 9,
+      color: '#8a1f14',
+      weight: 2,
+      fillColor: '#b42318',
+      fillOpacity: 0.85
+    }).addTo(guessMap);
+    guessMarker.bindPopup(label);
+    if (caption) {
+      caption.textContent = state.done
+        ? ('Mystery city revealed: ' + label + '. Pan and zoom around.')
+        : ('Latest guess: ' + label + '. Pan and zoom — this is not the answer unless you nailed it.');
+    }
+  } else {
+    guessMap.setView([20, 0], 2);
+    if (caption) caption.textContent = 'Pan and zoom freely. After you guess, the map jumps to that city — never spoils the answer.';
+  }
+
+  setTimeout(() => { if (guessMap) guessMap.invalidateSize(); }, 80);
+}
+
 function render() {
   document.getElementById("streak").textContent = streakCount() ? (`streak ${streakCount()}`) : "";
   const S = P.stages[stageIndex(state)];
@@ -2344,7 +2531,7 @@ function render() {
   const log = state.guesses.map((g, i) => {
     const h = g.ok ? { t: "yes", key: "ok" } : heat(g.km);
     const latest = (i === lastIdx && justGuessed) ? " latest" : "";
-    return `<li class="heat-${h.key}${latest}"><strong>${g.name}</strong> — ${g.ok ? "yes" : h.t}${g.ok ? "" : " · " + fmtMi(g.km)}</li>`;
+    return `<li class="heat-${h.key}${latest}"><strong>${g.name}</strong><span class="city-region">(${g.region || cityRegion(g.name)})</span> — ${g.ok ? "yes" : h.t}${g.ok ? "" : " · " + fmtMi(g.km)}</li>`;
   }).join("");
 
   let banner = "";
@@ -2376,7 +2563,7 @@ function render() {
     ${state.done ? "" : `
       <div class="guess-wrap"><div class="guess-box">
         <label for="city">Guess the city</label>
-        <input id="city" type="text" inputmode="text" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="Type any city" />
+        <input id="city" type="text" inputmode="text" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="City, with country/state in list" />
         <ul class="suggestions" id="suggestions"></ul>
         <div class="err" id="guessErr"></div>
         <button class="go" type="button" id="guessBtn">${left} left</button>
@@ -2384,9 +2571,17 @@ function render() {
     `}
     ${banner}
     <ul class="log">${log}</ul>
+    <aside class="map-panel" aria-label="Guess map">
+      <div class="map-kicker">Field map</div>
+      <p class="map-caption" id="mapCaption">Your guesses on the map — not the mystery city until the round ends. Basemap © Esri · city labels on zoom.</p>
+      <div class="map-frame">
+        <div id="guessMap" role="application" aria-label="Map of your latest city guess"></div>
+      </div>
+    </aside>
     ${end}
   `;
   wireGuess();
+  updateGuessMap();
   const orb = document.getElementById("openResultsBtn");
   if (orb) orb.onclick = () => showResults();
   // consume pulse flag after paint
@@ -2402,7 +2597,7 @@ function wireGuess() {
   if (!input) return;
   const paint = () => {
     const list = suggestCities(input.value);
-    box.innerHTML = list.map(c => `<li data-city="${c[0]}">${c[0]}</li>`).join("");
+    box.innerHTML = list.map(c => `<li data-city="${c[0]}">${c[0]}<span class="city-region">(${c[3] || ""})</span></li>`).join("");
     [...box.querySelectorAll("li")].forEach(li => {
       li.addEventListener("click", () => {
         input.value = li.dataset.city;
@@ -2442,7 +2637,7 @@ function guessCity() {
   const ans = CITIES.find(c => c[0] === P.city);
   const km = dist([hit[1], hit[2]], [ans[1], ans[2]]);
   const ok = hit[0] === P.city;
-  state.guesses.push({ name: hit[0], km, ok });
+  state.guesses.push({ name: hit[0], region: hit[3] || "", km, ok });
   justGuessed = true;
   if (ok || state.guesses.length >= 6) {
     state.done = true;
