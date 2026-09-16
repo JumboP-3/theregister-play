@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Register</title>
+<!-- pages-bust: et-todayKey-2026-09-15-reykjavik-calendar-v12 -->
+<meta name="description" content="One stranger's receipt. One tip. 6 tries. Hotter or colder. Can you beat the crowd?" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="The Register" />
+<meta property="og:title" content="Today's tab is open · The Register" />
+<meta property="og:description" content="One stranger's receipt. One tip. 6 tries. Hotter or colder. Can you beat the crowd?" />
+<meta property="og:url" content="https://playtheregister.github.io/" />
+<meta property="og:image" content="https://playtheregister.github.io/og.png?v=2" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Today's tab is open · The Register" />
+<meta name="twitter:description" content="One stranger's receipt. One tip. 6 tries. Hotter or colder. Can you beat the crowd?" />
+<meta name="twitter:image" content="https://playtheregister.github.io/og.png?v=2" />
+<style>
+  :root {
+    --ink: #241f18;
+    --paper: #f7f1e4;
+    --paper2: #efe6d4;
+    --cream: #fffaf0;
+    --rule: #d2c6b0;
+    --red: #b42318;
+    --muted: #7a7163;
+    --ok: #2f6d4f;
+    --hot: #c2410c;
+    --tip: #8a1f14;
+    --burning: #9a3412;
+    --warm: #b45309;
+    --cold: #3b6ea5;
+    --freezing: #1e3a5f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background:
+    radial-gradient(ellipse at top, #3a342c 0%, #1f1c18 70%);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+  body { min-height: 100dvh; display: flex; justify-content: center; padding: 18px 12px; }
+  .frame {
+    width: 100%; max-width: 520px; min-height: calc(100dvh - 36px); background: var(--paper);
+    padding: 30px 26px 52px; border-radius: 10px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  header { border-bottom: 3px double var(--ink); padding-bottom: 12px; margin-bottom: 20px; }
+  .mast { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; text-align: center; color: var(--tip); }
+  h1 { font-size: 46px; line-height: 0.95; text-align: center; margin: 8px 0; font-weight: 800; letter-spacing: -0.02em; }
+  .date { text-align: center; font-size: 14px; color: var(--muted); }
+  .streak { text-align: center; font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .lede { font-size: 16px; line-height: 1.45; margin: 0 0 14px; color: #3d372e; }
+  .tip {
+    border: 1px solid #d8c7a8; border-left: 5px solid var(--tip);
+    padding: 14px 16px; margin: 0 0 18px; background: linear-gradient(180deg, #fff8ea, #f3e8d4);
+    border-radius: 2px 8px 8px 2px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .tip .kicker {
+    display: inline-block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #fff; background: var(--tip); padding: 3px 8px; border-radius: 999px; margin-bottom: 8px;
+    font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 700;
+  }
+  .tip .body { font-size: 17px; line-height: 1.4; }
+  .stage {
+    display: inline-block; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 8px; font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  .receipt {
+    background: var(--cream); border: 1px dashed #b7a789; padding: 20px 16px 16px;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 14px;
+    box-shadow: 0 10px 24px rgba(60,40,10,0.08); position: relative;
+  }
+  .receipt:before, .receipt:after {
+    content: ""; position: absolute; left: 8px; right: 8px; height: 6px;
+    background: radial-gradient(circle, transparent 3px, var(--paper) 3.5px) 0 0 / 10px 6px repeat-x;
+  }
+  .receipt:before { top: -3px; }
+  .receipt:after { bottom: -3px; transform: rotate(180deg); }
+  .receipt .shop { text-align: center; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 14px; color: #5c5346; }
+  .row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; }
+  .row span:first-child { flex: 1; }
+  .total { border-top: 2px solid var(--ink); margin-top: 10px; padding-top: 10px; font-weight: 700; font-size: 15px; }
+  label { display: block; font-size: 14px; margin: 20px 0 6px; }
+  input {
+    width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #cbb996;
+    background: var(--cream); font: inherit; font-size: 17px; border-radius: 8px;
+  }
+  input:focus { outline: 2px solid #c45a2a; outline-offset: 1px; border-color: #c45a2a; }
+  .go, .ghost {
+    width: 100%; margin-top: 10px; min-height: 50px; padding: 12px; border: 0;
+    background: var(--ink); color: var(--paper); font: inherit; font-size: 16px; cursor: pointer;
+    border-radius: 8px;
+  }
+  .go:hover { background: #3a3228; }
+  .ghost { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+  .log { list-style: none; padding: 0; margin: 14px 0 0; }
+  .log li {
+    font-size: 15px; padding: 10px 12px; margin: 0 0 6px; border-radius: 6px;
+    border-left: 5px solid var(--rule); background: rgba(255,255,255,0.35);
+  }
+  .log li.heat-burning { border-left-color: var(--burning); background: #ffedd5; color: var(--burning); }
+  .log li.heat-hot { border-left-color: var(--hot); background: #ffedd5; color: var(--hot); }
+  .log li.heat-warm { border-left-color: var(--warm); background: #fef3c7; color: #92400e; }
+  .log li.heat-cold { border-left-color: var(--cold); background: #dbeafe; color: var(--cold); }
+  .log li.heat-freezing { border-left-color: var(--freezing); background: #e0e7ff; color: var(--freezing); }
+  .log li.heat-ok { border-left-color: var(--ok); background: #dcfce7; color: var(--ok); }
+  .log li.latest { box-shadow: 0 0 0 2px rgba(36,31,24,0.12); font-weight: 600; }
+  .hot { color: var(--hot); }
+  .ok { color: var(--ok); }
+  .share {
+    margin-top: 16px; padding: 12px; border: 1px solid #cbb996; background: var(--paper2);
+    font-family: ui-monospace, Menlo, monospace; font-size: 13px; text-align: left;
+    border-radius: 8px; white-space: pre-line; line-height: 1.55;
+    max-width: 100%; overflow: hidden;
+    overflow-wrap: anywhere; word-break: break-all;
+  }
+  .results-sheet .share {
+    font-size: 12px; padding: 10px;
+    max-width: 100%; overflow: hidden;
+    overflow-wrap: anywhere; word-break: break-all;
+  }
+  .fine { margin-top: 28px; font-size: 11px; color: var(--muted); line-height: 1.45; }
+  .fine a { color: var(--tip); }
+  .msg { margin-top: 14px; font-size: 17px; line-height: 1.35; }
+  .helpbtn {
+    float: right; border: 1px solid #cbb996; background: var(--cream);
+    font: inherit; font-size: 14px; padding: 4px 10px; cursor: pointer; border-radius: 999px;
+  }
+  .overlay {
+    position: fixed; inset: 0; background: rgba(26,24,20,0.72); display: flex;
+    align-items: center; justify-content: center; padding: 20px; z-index: 20;
+    pointer-events: auto;
+  }
+  .overlay[hidden] { display: none !important; }
+  .overlay .card {
+    background: var(--paper); max-width: 420px; width: 100%; padding: 24px;
+    border: 2px solid var(--ink); border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .overlay h2 { margin: 0 0 10px; font-size: 26px; }
+  .overlay p { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+  .hidden { display: none; }
+  .guess-wrap {
+    position: sticky; bottom: 0; z-index: 5; margin: 18px -8px 0;
+    padding: 12px 8px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(247,241,228,0), var(--paper) 28%);
+  }
+  .guess-box {
+    background: var(--cream); border: 1px solid #cbb996; border-radius: 12px;
+    padding: 12px; box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+  }
+  .guess-box label { margin: 0 0 8px; }
+  .guess-box input {
+    font-size: 16px;
+    -webkit-user-select: text; user-select: text;
+    touch-action: manipulation;
+  }
+  .suggestions {
+    list-style: none; margin: 8px 0 0; padding: 0; max-height: 180px; overflow: auto;
+    border: 1px solid #e0d3b8; border-radius: 8px; background: #fff;
+  }
+  .suggestions:empty { display: none; }
+  .suggestions li {
+    padding: 12px 14px; border-bottom: 1px solid #efe6d4; font-size: 16px; cursor: pointer;
+  }
+  .suggestions li:last-child { border-bottom: 0; }
+  .suggestions li:active, .suggestions li.active { background: #f3e8d4; }
+  .err { color: var(--hot); font-size: 14px; margin-top: 8px; min-height: 1.2em; }
+
+  /* Heat feedback banner */
+  .heat-banner {
+    margin: 14px 0 0; padding: 16px 18px; border-radius: 10px; color: #fff;
+    font-family: ui-sans-serif, system-ui, sans-serif; box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    border: 2px solid rgba(0,0,0,0.08);
+  }
+  .heat-banner.pulse { animation: heatPulse 0.55s ease-out; }
+  @keyframes heatPulse {
+    0% { transform: scale(0.96); opacity: 0.55; }
+    40% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .heat-banner .hb-city { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.9; margin-bottom: 4px; }
+  .heat-banner .hb-word { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .heat-banner .hb-dist { font-size: 15px; margin-top: 6px; opacity: 0.95; }
+  .heat-banner.heat-burning { background: linear-gradient(135deg, #ea580c, #9a3412); }
+  .heat-banner.heat-hot { background: linear-gradient(135deg, #f97316, #c2410c); }
+  .heat-banner.heat-warm { background: linear-gradient(135deg, #f59e0b, #b45309); }
+  .heat-banner.heat-cold { background: linear-gradient(135deg, #60a5fa, #3b6ea5); }
+  .heat-banner.heat-freezing { background: linear-gradient(135deg, #64748b, #1e3a5f); }
+  .heat-banner.heat-ok { background: linear-gradient(135deg, #4ade80, #2f6d4f); }
+
+  /* Final Results overlay — cash-register receipt dispense (mobile + PC) */
+  .results-overlay {
+    position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 30; width: 100%;
+    height: 100%; min-height: 100dvh;
+    background: rgba(22,20,17,0.92);
+    display: flex; align-items: center; justify-content: center;
+    padding:
+      max(12px, env(safe-area-inset-top, 0px))
+      max(14px, env(safe-area-inset-right, 0px))
+      max(12px, env(safe-area-inset-bottom, 0px))
+      max(14px, env(safe-area-inset-left, 0px));
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .results-overlay[hidden] { display: none !important; }
+  .results-overlay.is-printing { cursor: pointer; }
+  .results-stage {
+    width: 100%; max-width: 340px; max-height: 100%;
+    margin: 0 auto; display: flex; flex-direction: column; min-height: 0;
+  }
+  .results-frame {
+    background: linear-gradient(180deg, #2e2923 0%, #221e19 55%, #1a1713 100%);
+    border-radius: 14px 14px 10px 10px;
+    padding: 10px 10px 14px;
+    box-shadow:
+      0 22px 48px rgba(0,0,0,.5),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column;
+    border: 1px solid rgba(0,0,0,.35);
+  }
+  .results-register-bar {
+    flex: 0 0 auto;
+    text-align: center;
+    padding: 2px 8px 8px;
+    position: relative;
+  }
+  .results-brand-stamp {
+    display: inline-block;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(232, 214, 180, 0.55);
+    border: 1px solid rgba(180, 150, 110, 0.28);
+    padding: 3px 10px 2px;
+    border-radius: 2px;
+    background: rgba(0,0,0,.18);
+  }
+  .results-slot {
+    flex: 0 0 auto;
+    height: 26px; border-radius: 3px;
+    margin: 0 6px; position: relative; z-index: 5;
+    background:
+      linear-gradient(180deg, #060504 0%, #0c0a08 38%, #15120f 62%, #080706 100%);
+    box-shadow:
+      inset 0 7px 14px rgba(0,0,0,.95),
+      inset 0 -3px 5px rgba(0,0,0,.7),
+      inset 0 1px 0 rgba(255,255,255,.04),
+      0 1px 0 rgba(255,255,255,.05);
+    overflow: hidden;
+  }
+  /* outer metal-ish lips / mouth surround */
+  .results-slot::before {
+    content: ""; position: absolute; left: -7px; right: -7px; top: -7px; bottom: -6px;
+    border-radius: 5px; z-index: -1;
+    background:
+      linear-gradient(180deg, #4a433a 0%, #322c26 42%, #1f1b17 100%);
+    box-shadow:
+      0 3px 8px rgba(0,0,0,.55),
+      inset 0 1px 0 rgba(255,255,255,.14),
+      inset 0 -1px 0 rgba(0,0,0,.45);
+  }
+  /* thin metal strip across the mouth */
+  .results-slot::after {
+    content: ""; position: absolute; left: 6%; right: 6%; top: 45%; height: 3px;
+    border-radius: 1px;
+    background: linear-gradient(180deg, #1a1612 0%, #3a342c 45%, #0e0c0a 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.06),
+      inset 0 1px 0 rgba(0,0,0,.6);
+  }
+  .results-printer {
+    overflow: hidden; height: 0;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 120px);
+    margin-top: -14px;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    position: relative; z-index: 1;
+    /* soft gloom under the slot so paper emerges from dark */
+    mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 100%);
+  }
+  .results-printer.instant .results-sheet {
+    transition: none !important;
+  }
+  .results-printer.printed {
+    overflow-x: hidden;
+    overflow-y: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .results-sheet {
+    width: auto; max-width: none; margin: 0 10px;
+    background:
+      linear-gradient(180deg, #fffaf0 0%, var(--cream) 28%, #f3ead8 100%);
+    border-radius: 0 0 2px 2px; border: none;
+    border-left: 1px solid rgba(180, 150, 110, 0.25);
+    border-right: 1px solid rgba(180, 150, 110, 0.25);
+    border-bottom: 1px solid rgba(160, 130, 90, 0.28);
+    box-shadow:
+      0 2px 8px rgba(0,0,0,.12),
+      inset 0 0 40px rgba(210, 180, 120, 0.08);
+    padding: 22px 14px 20px; position: relative;
+    /* start pose; motion driven by WAAPI / rAF (not CSS transition — Windows mutes those) */
+    transform: translate3d(0, -100%, 0);
+    will-change: transform;
+    transition: none;
+  }
+  .results-sheet.is-feeding {
+    /* transform set by WAAPI/rAF; box-shadow updates with class */
+    box-shadow:
+      0 10px 28px rgba(0,0,0,.32),
+      0 2px 0 rgba(0,0,0,.06),
+      inset 0 0 40px rgba(210, 180, 120, 0.08);
+  }
+  /* soft shadow just under emerging top edge while feeding */
+  .results-sheet.is-feeding:not(.is-printed)::before {
+    box-shadow: 0 6px 10px rgba(0,0,0,.18);
+  }
+  /* slight paper curl at bottom tip while feeding */
+  .results-sheet.is-feeding:not(.is-printed)::after {
+    content: ""; position: absolute; left: 4px; right: 4px; bottom: -1px; height: 14px;
+    pointer-events: none; z-index: 2;
+    background: linear-gradient(180deg, transparent 0%, rgba(40,30,15,.07) 55%, rgba(40,30,15,.14) 100%);
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 6px 10px rgba(0,0,0,.12);
+  }
+  .results-sheet.is-printed {
+    transform: none;
+    will-change: auto;
+    transition: none;
+    box-shadow:
+      0 14px 32px rgba(0,0,0,.28),
+      inset 0 0 40px rgba(210, 180, 120, 0.08);
+  }
+  /* serrated / perforated top edge */
+  .results-sheet:before {
+    content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 12px;
+    background:
+      radial-gradient(circle at 5px 3px, transparent 3.4px, var(--cream) 3.55px) 0 0 / 10px 12px repeat-x;
+    pointer-events: none; z-index: 1;
+  }
+  /* faint dashed cut line under serration */
+  .results-sheet .receipt-cut {
+    height: 1px; margin: 2px 2px 10px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0 3px,
+      rgba(160, 130, 90, 0.4) 3px 5px
+    );
+  }
+  .receipt-tab-head {
+    text-align: center;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    color: #5c5346;
+    margin: 2px 0 4px;
+    line-height: 1.35;
+  }
+  .receipt-tab-stars {
+    font-size: 11px; letter-spacing: 0.12em; font-weight: 700;
+    color: var(--ink);
+  }
+  .receipt-tab-date {
+    font-size: 10px; letter-spacing: 0.06em; color: var(--muted);
+    margin-top: 2px;
+  }
+  .results-sheet .go,
+  .results-sheet .ghost {
+    min-height: 48px; touch-action: manipulation;
+  }
+  .print-status-wrap {
+    text-align: center; margin: 0 0 12px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .print-status-wrap::before,
+  .print-status-wrap::after {
+    content: ""; flex: 1; height: 1px; max-width: 48px;
+    background: repeating-linear-gradient(90deg, transparent 0 2px, rgba(160,130,90,.45) 2px 4px);
+  }
+  .print-status {
+    display: inline-block;
+    background: transparent; color: var(--tip);
+    border: 1px solid rgba(138, 31, 20, 0.45);
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 4px 9px; border-radius: 2px;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-weight: 700;
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .print-status.show { opacity: 1; }
+  .print-skip {
+    flex: 0 0 auto;
+    display: block; width: 100%; max-width: 280px; margin: 8px auto 0;
+    background: transparent; border: 0;
+    color: #a89b88; font-size: 13px; letter-spacing: 0.06em; cursor: pointer;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    min-height: 44px; padding: 10px 14px;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  }
+  .print-skip[hidden] { display: none !important; }
+  .results-actions {
+    display: flex; flex-direction: column; gap: 8px; margin-top: 0;
+  }
+  .results-sheet .replay-print {
+    margin-top: 0; min-height: 48px;
+    border-color: #b7a789; color: var(--muted);
+    font-size: 15px;
+  }
+  .results-sheet .replay-print:hover { color: var(--ink); border-color: var(--ink); }
+  .results-sheet .replay-print[hidden] { display: none !important; }
+  .results-sheet .replay-print:disabled {
+    opacity: 0.45; cursor: default; pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    /* Do not kill intentional Results receipt spit (.is-feeding / .is-printing).
+       Soften only non-print chrome so PC with OS "Show animations" off still gets the drama. */
+    .print-status { transition: none !important; }
+  }
+  .results-kicker {
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; text-align: center;
+    color: var(--tip); font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .results-headline {
+    text-align: center; font-size: 28px; line-height: 1.05; margin: 0 0 6px; font-weight: 800;
+  }
+  .results-headline.win { color: var(--ok); }
+  .results-headline.lose { color: var(--tip); }
+  .results-sub { text-align: center; font-size: 14px; color: var(--muted); margin: 0 0 14px; }
+  .results-block {
+    background: rgba(255,250,240,0.72); border: 1px dashed #cbb996; border-radius: 4px;
+    padding: 14px 12px; margin: 0 0 12px;
+  }
+  .results-block h3 {
+    margin: 0 0 10px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  .results-trail { list-style: none; padding: 0; margin: 0 0 12px; }
+  .results-trail li {
+    font-size: 13px; padding: 7px 8px; margin: 0 0 4px; border-radius: 3px;
+    border-left: 4px solid var(--rule); background: rgba(255,255,255,0.45);
+  }
+  .results-trail li.heat-burning { border-left-color: var(--burning); background: #ffedd5; }
+  .results-trail li.heat-hot { border-left-color: var(--hot); background: #ffedd5; }
+  .results-trail li.heat-warm { border-left-color: var(--warm); background: #fef3c7; }
+  .results-trail li.heat-cold { border-left-color: var(--cold); background: #dbeafe; }
+  .results-trail li.heat-freezing { border-left-color: var(--freezing); background: #e0e7ff; }
+  .results-trail li.heat-ok { border-left-color: var(--ok); background: #dcfce7; }
+  .crowd-line {
+    text-align: center; font-size: 16px; line-height: 1.35; padding: 8px 4px;
+    font-weight: 600;
+  }
+  .crowd-line.muted { color: var(--muted); font-weight: 400; font-size: 15px; }
+  .city-card .city-name {
+    font-size: 24px; font-weight: 800; margin: 0 0 12px; text-align: center;
+  }
+  .city-card .fact {
+    margin: 0 0 12px; font-size: 14px; line-height: 1.45;
+    padding-left: 12px; border-left: 3px solid var(--tip);
+  }
+  .city-card .fact .label {
+    display: block; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px; font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+  .streak-soft {
+    text-align: center; font-size: 14px; color: var(--muted); margin: 4px 0 14px;
+    font-style: italic;
+  }
+  .end-bar {
+    margin-top: 16px; padding: 12px; border: 1px dashed #cbb996; border-radius: 8px;
+    background: var(--paper2); text-align: center;
+  }
+  .end-bar p { margin: 0 0 8px; font-size: 15px; }
+  @media (max-width: 640px) {
+    body { padding: 0; }
+    .frame { border-radius: 0; min-height: 100dvh; padding: 20px 16px 28px; }
+    .receipt:before, .receipt:after { display: none; }
+    .results-overlay {
+      align-items: center;
+      padding:
+        max(8px, env(safe-area-inset-top, 0px))
+        max(10px, env(safe-area-inset-right, 0px))
+        max(8px, env(safe-area-inset-bottom, 0px))
+        max(10px, env(safe-area-inset-left, 0px));
+    }
+    .results-stage { max-width: 320px; width: 100%; max-height: 100%; }
+    .results-frame { border-radius: 12px 12px 8px 8px; padding: 8px 6px 12px; }
+    .results-slot { margin: 0 4px; height: 24px; }
+    .results-slot::before { left: -5px; right: -5px; top: -6px; bottom: -5px; }
+    .results-printer {
+      max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 104px);
+      margin-top: -13px;
+    }
+    .results-sheet { margin: 0 6px; padding: 20px 12px 18px; }
+    .results-headline { font-size: 26px; }
+    .print-skip { min-height: 48px; font-size: 14px; }
+    .results-sheet .replay-print { min-height: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="frame" id="mainFrame">
+  <header>
+    <button class="helpbtn" type="button" id="helpOpen">?</button>
+    <div class="mast">Evening edition</div>
+    <h1>The Register</h1>
+    <div class="date" id="dateline"></div>
+    <div class="streak" id="streak"></div>
+  </header>
+  <div id="game"></div>
+  <p class="fine">One daily: a real basket plus one local paper line. Prices are converted to USD from the city's local currency so every receipt is comparable. Puzzle, not a newspaper. Not financial advice. Credit: <a href="https://prices.openfoodfacts.org" target="_blank" rel="noopener">Open Prices</a>. · <a href="ads.html">Advertise</a></p>
+</div>
+
+<div class="overlay" id="help" hidden>
+  <div class="card">
+    <div class="mast" style="margin-bottom:8px">Tonight's paper</div>
+    <h2>You're holding a stranger's tab</h2>
+    <p>One tip from the local paper. One receipt, converted to USD. The mystery city could be <strong>anywhere in the world</strong>.</p>
+    <p>You start with a <strong>convenience-store run</strong> from the mystery city — snacks, drinks, everyday shelf stuff.</p>
+    <p>Two wrong guesses and the tab becomes <strong>lunch</strong>. Two more and it becomes <strong>dinner with a drink</strong>.</p>
+    <p><strong>Guess the city.</strong> Six tries. Hotter or colder. No map.</p>
+    <p>Every price is shown in USD so cities stay comparable.</p>
+    <button class="go" type="button" id="helpClose">Open today's paper</button>
+  </div>
+</div>
+
+<div class="results-overlay" id="results" hidden>
+  <div class="results-stage">
+    <div class="results-frame">
+      <div class="results-register-bar" aria-hidden="true">
+        <span class="results-brand-stamp">THE REGISTER</span>
+      </div>
+      <div class="results-slot" aria-hidden="true"></div>
+      <div class="results-printer" id="resultsPrinter">
+        <div class="results-sheet" id="resultsSheet"></div>
+      </div>
+    </div>
+    <button type="button" class="print-skip" id="printSkip" hidden>Skip</button>
+  </div>
+</div>
+
+<script src="cities.js"></script>
+<script>
+/* Baskets from Open Prices (prices.openfoodfacts.org), Sep 2026 pull, converted to USD.
+   Local paper lines are fair place clues, not fake news spirals. */
+const CITIES = (window.REGISTER_CITIES && window.REGISTER_CITIES.length)
+  ? window.REGISTER_CITIES
+  : [["Tokyo",35.68,139.69],["Hiroshima",34.39,132.46],["Reykjavik",64.15,-21.94],["Madrid",40.42,-3.70],["São Paulo",-23.55,-46.63],["New York",40.71,-74.01],["Melbourne",-37.81,144.96],["Dubai",25.2,55.27],["Rome",41.90,12.50],["Aachen",50.78,6.08],["Paris",48.86,2.35],["London",51.51,-0.13]];
+
+const DAYS = {
+  "2026-09-13": {
+    city: "Aachen",
+    currency: "USD",
+    paper: "Sunday crowd still circles the old cathedral square.",
+    why: "The cathedral was the fair clue. Dinner was a printen town night.",
+    funFact: "Aachen Cathedral is Germany's oldest cathedral and a UNESCO site — Charlemagne was buried here, and coronations ran for centuries.",
+    lifeBite: "A Rewe-style basket with edamame, hummus, and spelt bread, then brauhaus sauerbraten with Kölsch — Rhineland grocery habits meeting a printen-town night out.",
+    priceContext: "Convenience run about $20; brauhaus dinner with drinks about $32 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "grocery basket",
+        lines: [["edamame", "1.96"], ["chickpeas", "0.92"], ["hummus pine nuts", "1.96"], ["banana yogurt", "0.80"], ["decaffeinated coffee", "11.61"], ["spelt bread", "2.89"]],
+        total: "20.14",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "market stall",
+        lines: [["sausage in a bun", "5.23"], ["pils, small", "3.72"]],
+        total: "8.95",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "brauhaus",
+        lines: [["sauerbraten plate", "21.96"], ["kölsch", "4.41"], ["schnaps", "5.23"]],
+        total: "31.60",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-14": {
+    city: "Hiroshima",
+    currency: "USD",
+    paper: "Morning walkers still gather at the peace park by the river before the heat.",
+    why: "Local-style savory pancake for dinner. The park and the tab both pointed here.",
+    funFact: "Hiroshima-style okonomiyaki is layered — cabbage, pork, noodles — not mixed like Osaka's. Locals still call it the city's everyday comfort plate.",
+    lifeBite: "A light convenience snack, then pork-egg-soba okonomiyaki for lunch and shrimp okonomiyaki with beer and sake for dinner — a classic local day by the river.",
+    priceContext: "Convenience snacks about $5; teppan dinner with drinks about $16 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "convenience aisle",
+        lines: [["camembert cheese bites", "1.93"], ["string cheese", "0.99"], ["blueberry yogurt", "1.18"], ["cocoa bran snack", "1.26"]],
+        total: "5.36",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "counter lunch",
+        lines: [["pork-egg-soba okonomiyaki", "6.23"], ["oolong tea", "2.60"]],
+        total: "8.83",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "teppan dinner",
+        lines: [["shrimp okonomiyaki", "8.50"], ["draft beer, medium", "3.77"], ["local sake, small", "3.57"]],
+        total: "15.84",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-15": {
+    city: "Reykjavik",
+    currency: "USD",
+    paper: "The tall concrete church still owns the skyline over the harbour.",
+    why: "The church was the fair clue. Skyr, salted licorice, and dried fish on the first tab pointed here; dinner was harbour fish stew.",
+    funFact: "Hallgrímskirkja's tower still owns the skyline. Down by the harbour, the humble hot dog remains Iceland's most democratic snack.",
+    lifeBite: "A steep corner-shop run of skyr, salted licorice, dried fish, and dark rye; a harbour hot dog with fried onions for lunch; then fish stew and a pint — Iceland prices bite, but the harbour meal is the ritual.",
+    priceContext: "Corner grocer about $20; harbour dinner about $45 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner grocer",
+        lines: [["skyr cup", "4.20"], ["salted licorice", "3.90"], ["dried fish strips", "7.40"], ["dark rye loaf", "4.10"]],
+        total: "19.60",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "harbour stand",
+        lines: [["hot dog, fried onions", "8.90"], ["soda", "3.80"]],
+        total: "12.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "harbour kitchen",
+        lines: [["fish stew", "31.80"], ["local lager, pint", "13.50"]],
+        total: "45.30",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-16": {
+    city: "Madrid",
+    currency: "USD",
+    paper: "The cercanías still jammed before kickoff — take the metro if you can.",
+    why: "The cercanías crush was the fair clue. Dinner was tapas and a caña.",
+    funFact: "Madrid's cercanías and metro keep the derby and late-night bar crawl moving. A menú del día and a cold caña are still the city's everyday rhythm.",
+    lifeBite: "Corner-shop Spanish staples in the morning, a menú del día at lunch, then tortilla and a caña at a neighborhood bar — classic Madrileño cadence.",
+    priceContext: "Corner shop about $12; tapas dinner with a caña about $22 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner shop",
+        lines: [["gazpacho brick", "2.40"], ["patatas fritas bag", "1.65"], ["jamón serrano pack", "4.85"], ["Aquarius, bottle", "1.90"], ["Magnum classic", "2.15"]],
+        total: "12.95",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "menú del día",
+        lines: [["menú del día", "14.20"], ["café con leche", "1.85"]],
+        total: "16.05",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "bar de barrio",
+        lines: [["tortilla de patatas", "8.50"], ["jamón plate, small", "7.20"], ["caña", "2.80"], ["aceitunas", "2.40"]],
+        total: "20.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-17": {
+    city: "São Paulo",
+    currency: "USD",
+    paper: "The yellow metro line jammed before the derby crowd spilled out.",
+    why: "The metro derby line was the fair clue. Dinner was a chopp and a plate.",
+    funFact: "São Paulo's yellow metro line and derby days pack platforms citywide. Botecos — neighborhood bars with coxinha and chopp — are the everyday hangout.",
+    lifeBite: "Guaraná, paçoca, and mortadella from the mercado, pão de queijo at the padaria, then coxinha and draft beer at a boteco — a very Paulista rhythm.",
+    priceContext: "Mercado run about $9; boteco dinner about $10 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "mercado aisle",
+        lines: [["guaraná can", "1.45"], ["paçoca sweets", "1.80"], ["mortadella pack", "2.90"], ["french rolls, six", "1.60"], ["chocolate milk carton", "1.10"]],
+        total: "8.85",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "padaria",
+        lines: [["pão de queijo, six", "3.52"], ["cafezinho", "1.17"], ["guaraná, glass", "1.56"]],
+        total: "6.25",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "boteco",
+        lines: [["coxinha, two", "4.69"], ["chopp, draft", "3.13"], ["cachaça, shot", "2.34"]],
+        total: "10.16",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-18": {
+    city: "New York",
+    currency: "USD",
+    paper: "Weekend work on the crosstown train again. Bring a book.",
+    why: "The L train was the fair clue. Dinner was a slice city night.",
+    funFact: "The L train's weekend work is a New York cliché. A plain slice remains the city's unit of lunch — cheap, fast, and everywhere.",
+    lifeBite: "Bodega bagels and a black-and-white cookie, a corner slice and soda for lunch, then pepperoni with a local lager — classic NYC casual.",
+    priceContext: "Bodega run about $12; late counter dinner about $22.50 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "bodega counter",
+        lines: [["everything bagels, two", "3.50"], ["cream cheese", "4.29"], ["black-and-white cookie", "2.75"], ["arizona iced tea", "1.25"]],
+        total: "11.79",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "corner slice",
+        lines: [["plain slice", "3.50"], ["fountain soda", "2.00"]],
+        total: "5.50",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "late counter",
+        lines: [["pepperoni slice", "4.50"], ["local lager", "8.00"], ["whiskey shot", "10.00"]],
+        total: "22.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-19": {
+    city: "Melbourne",
+    currency: "USD",
+    paper: "The coastal tram was still packed after the match.",
+    why: "The tram number was the fair clue. Dinner was a parma and a pint.",
+    funFact: "Coastal trams after the match are a Melbourne weekend cliché. Chicken parma — crumbed, sauced, cheesed — is still pub canon.",
+    lifeBite: "Milk-bar meat pie, dim sims, and iced coffee, a cafe parma for lunch, then pub parma with a pint — Melburnians do comfort food hard.",
+    priceContext: "Milk bar about $16; pub dinner about $38 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "suburban milk bar",
+        lines: [["meat pie", "5.20"], ["dim sims, pack", "4.10"], ["iced coffee carton", "3.40"], ["Violet Crumble", "2.80"]],
+        total: "15.50",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "cafe counter",
+        lines: [["chicken parma", "18.74"], ["pot of lager", "4.69"]],
+        total: "23.43",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "pub dinner",
+        lines: [["chicken parma", "20.19"], ["pint", "10.09"], ["house wine, glass", "7.93"]],
+        total: "38.21",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-20": {
+    city: "Dubai",
+    currency: "USD",
+    paper: "The metro to the big mall by the ski slope is still the weekend default.",
+    why: "The metro stop was the fair clue. Dinner was a mixed grill and a mocktail, or a hotel pint.",
+    funFact: "The metro stop for the mall with an indoor ski slope is a weekend default. Alcohol stays limited to hotels and licensed venues.",
+    lifeBite: "Dates, labneh, and karak tea, shawarma for lunch, mixed grill with juice or a hotel lager — mall-city everyday.",
+    priceContext: "Fresh counter about $14; grill dinner about $35 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "fresh counter",
+        lines: [["dates box", "4.80"], ["labneh cup", "3.20"], ["karak tea", "2.40"], ["pistachio baklava, two", "3.90"]],
+        total: "14.30",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "cafeteria",
+        lines: [["chicken shawarma", "4.90"], ["laban", "1.63"]],
+        total: "6.53",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "grill",
+        lines: [["mixed grill plate", "20.42"], ["fresh juice", "4.90"], ["hotel lager", "9.53"]],
+        total: "34.85",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-21": {
+    city: "Rome",
+    currency: "USD",
+    paper: "The neighborhood tram still rattles past the morning market stalls.",
+    why: "The market tram was the fair clue. Dinner was carbonara and a glass of wine.",
+    funFact: "Rome's neighborhood trams and open markets keep daily life off the tourist grid. Pizza al taglio and a late carbonara are still the city's weekday defaults.",
+    lifeBite: "A corner-bar cornetto and coffee, pizza al taglio at lunch, then carbonara with house wine — a Roman neighborhood rhythm.",
+    priceContext: "Corner bar about $6; trattoria dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner bar",
+        lines: [["cornetto, plain", "1.40"], ["cappuccino", "1.60"], ["acqua naturale", "1.10"], ["taralli bag", "2.20"]],
+        total: "6.30",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "pizza al taglio",
+        lines: [["pizza al taglio, two slices", "6.50"], ["acqua frizzante", "1.80"]],
+        total: "8.30",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "trattoria",
+        lines: [["carbonara", "14.50"], ["house red, glass", "5.50"], ["bruschetta, two", "5.20"], ["acqua", "2.00"]],
+        total: "27.20",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  // --- 2026-09-22 .. 2026-10-21: realistic local USD conversions (Open Prices sparse for most cities) ---
+  "2026-09-22": {
+    city: "Tokyo",
+    currency: "USD",
+    paper: "The loop train still packs tight after the evening chime.",
+    why: "The Yamanote loop was the fair clue. Dinner was a conveyer sushi night.",
+    funFact: "Tokyo's Yamanote line loops the core wards every few minutes. Conveyor-belt sushi (kaiten-zushi) started as a novelty and became an everyday dinner.",
+    lifeBite: "Konbini onigiri and canned coffee, a standing soba lunch, then sushi plates with draft beer and a small sake — a classic salary-day rhythm.",
+    priceContext: "Convenience snacks about $8; sushi dinner with drinks about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "konbini aisle",
+        lines: [["salmon onigiri", "1.45"], ["egg sandwich", "2.10"], ["canned coffee", "1.25"], ["green tea bottle", "1.40"], ["chocolate puff", "1.55"]],
+        total: "7.75",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "standing counter",
+        lines: [["tempura soba", "7.80"], ["soft drink", "1.60"]],
+        total: "9.40",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "kaiten counter",
+        lines: [["assorted sushi set", "16.50"], ["draft beer, medium", "4.20"], ["local sake, small", "3.80"], ["edamame", "3.20"]],
+        total: "27.70",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-23": {
+    city: "Lisbon",
+    currency: "USD",
+    paper: "The yellow tram still squeals up the steep hillside after lunch.",
+    why: "The hillside tram was the fair clue. Dinner was grilled sardines and vinho verde.",
+    funFact: "Lisbon's yellow Remodelados still climb Alfama and Graça. Grilled sardines and vinho verde are summer-table staples along the Tagus.",
+    lifeBite: "Pastelaria coffee and a pastel de nata, a bifana for lunch, then sardines with green wine — hillside-city everyday.",
+    priceContext: "Corner bakery about $6; tasca dinner about $24 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner pastelaria",
+        lines: [["pastel de nata, two", "2.60"], ["bica coffee", "1.10"], ["orange juice small", "2.20"]],
+        total: "5.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "snack bar",
+        lines: [["bifana sandwich", "4.50"], ["imperial beer, small", "2.20"]],
+        total: "6.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "tasca",
+        lines: [["grilled sardines plate", "14.80"], ["vinho verde, glass", "4.50"], ["ginginha shot", "2.80"], ["bread basket", "1.90"]],
+        total: "24.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-24": {
+    city: "Mexico City",
+    currency: "USD",
+    paper: "The pink line still rattles under the avenue before kickoff.",
+    why: "The metro color was the fair clue. Dinner was tacos al pastor and a michelada.",
+    funFact: "CDMX metro lines are color-coded; Line 1 is the pink one. Al pastor — trompo-spit pork with pineapple — is the city's signature street taco.",
+    lifeBite: "Oxxo snacks and agua de jamaica, a mid-day torta, then pastor tacos with a michelada — capital-city street rhythm.",
+    priceContext: "Corner shop about $5; taquería dinner about $12 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner shop",
+        lines: [["chamoy chips", "1.15"], ["agua de jamaica bottle", "1.40"], ["yogurt drink", "1.25"], ["peanut candy", "0.95"]],
+        total: "4.75",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "torta stand",
+        lines: [["torta de milanesa", "4.80"], ["agua fresca", "1.40"]],
+        total: "6.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "taquería",
+        lines: [["tacos al pastor, four", "5.60"], ["michelada", "3.80"], ["mezcal shot", "2.90"]],
+        total: "12.30",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-25": {
+    city: "Cape Town",
+    currency: "USD",
+    paper: "The cable car queue still snakes before the afternoon wind picks up.",
+    why: "The mountain cable car was the fair clue. Dinner was a braai plate and local pinotage.",
+    funFact: "Table Mountain's cableway is weather-dependent — wind often closes it. Braai culture and pinotage (a local grape cross) define weekend tables.",
+    lifeBite: "Woolworths-style snacks, a Gatsby sandwich for lunch, then boerewors with pinotage — peninsula weekend fare.",
+    priceContext: "Grocery nibble about $9; braai dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "suburban grocer",
+        lines: [["biltong pack", "3.40"], ["rooibos iced tea", "1.80"], ["rusks pack", "2.10"], ["fruit juice", "1.60"]],
+        total: "8.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "takeaway counter",
+        lines: [["gatsby sandwich, half", "6.50"], ["soda", "1.40"]],
+        total: "7.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "braai house",
+        lines: [["boerewors plate", "14.80"], ["pap and relish", "3.20"], ["pinotage, glass", "6.50"], ["local lager", "3.40"]],
+        total: "27.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-26": {
+    city: "Buenos Aires",
+    currency: "USD",
+    paper: "The colectivo still crawls past the obelisk before the evening match.",
+    why: "The obelisk corridor was the fair clue. Dinner was a parrilla night with malbec.",
+    funFact: "The Obelisco anchors Avenida 9 de Julio. Parrilla — wood-fired grill — and malbec are the city's ritual dinner pairing.",
+    lifeBite: "Kiosco alfajores and mate kit, a choripán lunch, then asado with malbec — porteño classic.",
+    priceContext: "Kiosco run about $6; parrilla dinner about $32 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "kiosco",
+        lines: [["alfajor, two", "2.20"], ["yerba mate small", "2.40"], ["soda water", "1.10"]],
+        total: "5.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "street cart",
+        lines: [["choripán", "4.50"], ["fernet cola, small", "3.20"]],
+        total: "7.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "parrilla",
+        lines: [["asado plate", "18.50"], ["provoleta", "5.20"], ["malbec, glass", "5.80"], ["Fernet shot", "2.40"]],
+        total: "31.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-27": {
+    city: "Seoul",
+    currency: "USD",
+    paper: "The underground maze under the palace station still confuses first-timers.",
+    why: "The palace-side metro maze was the fair clue. Dinner was Korean BBQ and soju.",
+    funFact: "Seoul Station and palace-area transfers are famously labyrinthine. Samgyeopsal (pork belly BBQ) with soju is the national hangout meal.",
+    lifeBite: "CU-aisle snacks and banana milk, a bibimbap lunch, then grilled pork with soju — capital comfort.",
+    priceContext: "Convenience aisle about $8; BBQ dinner about $30 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "convenience aisle",
+        lines: [["banana milk", "1.35"], ["triangular gimbap", "1.80"], ["honey butter chips", "2.10"], ["yuzu drink", "1.55"], ["cheese stick", "1.20"]],
+        total: "8.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "lunch room",
+        lines: [["bibimbap", "8.40"], ["barley tea", "1.50"]],
+        total: "9.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "grill house",
+        lines: [["samgyeopsal set for one", "18.50"], ["soju bottle", "4.20"], ["draft beer", "4.50"], ["kimchi pancake", "6.80"]],
+        total: "34.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-28": {
+    city: "Copenhagen",
+    currency: "USD",
+    paper: "Bike rush still floods the bridge before the harbour baths open.",
+    why: "The harbour bike bridge was the fair clue. Dinner was smørrebrød and aquavit.",
+    funFact: "Copenhagen's harbour bridges carry more bikes than cars at peak. Smørrebrød — open-faced rye sandwiches — and aquavit are old-school Danish table markers.",
+    lifeBite: "Corner bakery cardamom bun and rugbrød, a remoulade hot dog lunch, then classic smørrebrød with aquavit — Nordic casual.",
+    priceContext: "Bakery stop about $14; restaurant dinner about $51 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner bakery",
+        lines: [["cardamom bun", "3.80"], ["rugbrød loaf", "4.20"], ["leverpostej tub", "3.50"], ["cocoa milk", "2.40"]],
+        total: "13.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "pølsevogn",
+        lines: [["hot dog, remoulade", "6.90"], ["soda", "3.20"]],
+        total: "10.10",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "smørrebrød house",
+        lines: [["three smørrebrød set", "28.50"], ["aquavit shot", "8.20"], ["local lager", "7.80"], ["pickled herring extra", "6.40"]],
+        total: "50.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-29": {
+    city: "Chicago",
+    currency: "USD",
+    paper: "The elevated loop still screeches around the downtown rectangle.",
+    why: "The L loop was the fair clue. Dinner was a deep-dish night and a local lager.",
+    funFact: "Chicago's Loop is named for the elevated tracks that circle downtown. Deep-dish pizza remains the tourist-vs-local debate forever.",
+    lifeBite: "Giardiniera and cheddar-caramel popcorn from the corner, an Italian beef for lunch, then deep-dish with a Midwestern lager — lake-city classic.",
+    priceContext: "Corner market about $18; pizzeria dinner about $36 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner market",
+        lines: [["cheddar-caramel popcorn", "6.49"], ["giardiniera jar", "4.99"], ["Italian ice cup", "3.25"], ["poppy-seed buns, two", "2.80"]],
+        total: "17.53",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "beef stand",
+        lines: [["Italian beef sandwich", "11.50"], ["fountain drink", "2.50"]],
+        total: "14.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "pizzeria",
+        lines: [["deep-dish, personal", "18.00"], ["local lager, pint", "8.00"], ["whiskey neat", "10.00"]],
+        total: "36.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-09-30": {
+    city: "Istanbul",
+    currency: "USD",
+    paper: "The ferry still cuts the strait between continents at rush hour.",
+    why: "The intercontinental ferry was the fair clue. Dinner was meze and rakı.",
+    funFact: "Istanbul's ferries still stitch Europe to Asia across the Bosphorus. Rakı with meze — anise spirit and small plates — is the classic evening table.",
+    lifeBite: "Simit and tea on the quay, a dürüm lunch, then meze with rakı — strait-city rhythm.",
+    priceContext: "Quay snack about $4; meyhane dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "quay kiosk",
+        lines: [["simit", "0.90"], ["çay tea glass", "0.70"], ["ayran bottle", "1.10"], ["roasted chestnuts small", "1.40"]],
+        total: "4.10",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "dürüm stall",
+        lines: [["chicken dürüm", "4.80"], ["ayran", "1.20"]],
+        total: "6.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "meyhane",
+        lines: [["meze platter", "14.50"], ["grilled sea bass", "12.80"], ["rakı, double", "6.40"], ["tea", "0.80"]],
+        total: "34.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-01": {
+    city: "Singapore",
+    currency: "USD",
+    paper: "The underground walk still funnels shoppers toward the orchid garden stop.",
+    why: "The orchid MRT stop was the fair clue. Dinner was hawker chilli crab vibes and a Tiger.",
+    funFact: "Botanic Gardens MRT sits by UNESCO orchids. Hawker centres — shared food courts with dozens of stalls — are how the city eats every night.",
+    lifeBite: "Cold-storage snacks, chicken rice for lunch, then laksa and chilli crab bites with Tiger beer — island hawker night.",
+    priceContext: "Cold storage about $12; hawker dinner about $22 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "chiller aisle",
+        lines: [["kaya toast pack", "3.40"], ["bandung drink", "2.10"], ["prawn crackers", "2.80"], ["yogurt drink", "1.90"], ["milo packet", "1.60"]],
+        total: "11.80",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "hawker stall",
+        lines: [["chicken rice", "4.20"], ["sugarcane juice", "1.80"]],
+        total: "6.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "hawker centre",
+        lines: [["laksa bowl", "6.50"], ["chilli crab small plate", "12.80"], ["Tiger beer", "5.20"], ["cheng tng dessert", "2.40"]],
+        total: "26.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-02": {
+    city: "Lima",
+    currency: "USD",
+    paper: "The coastal cliff fog still rolls in before the evening ceviche rush.",
+    why: "The cliff-fog coast was the fair clue. Dinner was ceviche and a pisco sour.",
+    funFact: "Lima's garúa fog blankets the cliffs for months. Ceviche — raw fish cured in citrus — and the pisco sour are national icons.",
+    lifeBite: "Bodega Inca Kola and chifles, a menú del día lunch, then ceviche with pisco — misty-capital classic.",
+    priceContext: "Bodega run about $5; cevichería dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "bodega",
+        lines: [["Inca Kola", "1.40"], ["chifles plantain chips", "1.60"], ["alfajor", "0.90"], ["yogurt", "1.20"]],
+        total: "5.10",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "menú counter",
+        lines: [["menú del día", "5.80"], ["chicha morada", "1.40"]],
+        total: "7.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "cevichería",
+        lines: [["ceviche mixto", "14.50"], ["causa limeña", "6.20"], ["pisco sour", "7.80"]],
+        total: "28.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-03": {
+    city: "Edinburgh",
+    currency: "USD",
+    paper: "The mile up the ridge still fills before the castle floodlights switch on.",
+    why: "The ridge mile was the fair clue. Dinner was a haggis supper and a dram.",
+    funFact: "Edinburgh's Royal Mile climbs the volcanic ridge between castle and palace. Haggis, neeps, and tatties with a whisky dram remain tourist-and-local canon.",
+    lifeBite: "Corner shop Irn-Bru and shortbread, a Scotch pie lunch, then haggis with whisky — Old Town evening.",
+    priceContext: "Corner shop about $8; pub dinner about $34 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner shop",
+        lines: [["Irn-Bru can", "1.80"], ["shortbread pack", "2.90"], ["crisps", "1.70"], ["milk small", "1.40"]],
+        total: "7.80",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "bakery counter",
+        lines: [["Scotch pie", "3.50"], ["coffee", "3.20"]],
+        total: "6.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "pub kitchen",
+        lines: [["haggis neeps tatties", "16.80"], ["pint of ale", "7.20"], ["whisky dram", "8.50"], ["sticky toffee pudding", "6.40"]],
+        total: "38.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-04": {
+    city: "Nairobi",
+    currency: "USD",
+    paper: "Matatus still blare past the roundabout before the evening jam.",
+    why: "The matatu roundabout was the fair clue. Dinner was nyama choma and Tusker.",
+    funFact: "Nairobi's matatus — decorated minibuses — are the city's loud circulatory system. Nyama choma (grilled meat) with Tusker lager is the weekend default.",
+    lifeBite: "Duka mandazi and soda, a chapati-bean lunch, then grilled goat with Tusker — capital-city night.",
+    priceContext: "Duka snacks about $4; choma dinner about $16 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "duka counter",
+        lines: [["mandazi, three", "1.20"], ["soda bottle", "0.90"], ["groundnuts pack", "1.10"], ["chai mix", "1.00"]],
+        total: "4.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "hotel café",
+        lines: [["chapati and beans", "3.40"], ["chai", "0.80"]],
+        total: "4.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "choma spot",
+        lines: [["nyama choma plate", "9.50"], ["ugali and kachumbari", "2.40"], ["Tusker lager", "2.80"], ["soda", "0.90"]],
+        total: "15.60",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-05": {
+    city: "Sydney, AU",
+    currency: "USD",
+    paper: "The ferry still queues at the quay before the weekend fireworks talk starts.",
+    why: "The quay ferry was the fair clue. Dinner was a seafood platter and a schooner.",
+    funFact: "Circular Quay ferries fan out across the harbour. A schooner of lager and seafood by the water is the city's casual celebration meal.",
+    lifeBite: "Woolies snacks, a smashed-avo café lunch, then fish and chips with a schooner — harbour weekend.",
+    priceContext: "Grocery nibble about $12; waterfront dinner about $42 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "grocery lane",
+        lines: [["tim tams", "3.40"], ["flat white ready drink", "3.10"], ["vegemite small", "2.80"], ["orange juice", "2.60"]],
+        total: "11.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "café",
+        lines: [["smashed avocado toast", "14.50"], ["flat white", "4.20"]],
+        total: "18.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "harbour counter",
+        lines: [["fish and chips", "22.00"], ["oysters, half dozen", "18.50"], ["schooner of lager", "8.80"]],
+        total: "49.30",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-06": {
+    city: "Montreal",
+    currency: "USD",
+    paper: "The underground city corridors still fill when the first snow flurry hits.",
+    why: "The RÉSO underground network was the fair clue. Dinner was smoked meat and a local stout.",
+    funFact: "Montreal's underground city (RÉSO) links metro, malls, and offices for winter survival. Smoked-meat sandwiches are the deli religion.",
+    lifeBite: "Depanneur snacks, a poutine lunch, then smoked meat with a stout — bilingual-city comfort.",
+    priceContext: "Dep run about $9; deli dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "dépanneur",
+        lines: [["ketchup chips", "2.40"], ["maple cookies", "3.10"], ["sparkling water", "1.80"], ["chocolate bar", "1.90"]],
+        total: "9.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "snack counter",
+        lines: [["poutine, regular", "9.50"], ["soft drink", "2.20"]],
+        total: "11.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "deli",
+        lines: [["smoked meat sandwich", "14.80"], ["pickle and slaw", "3.20"], ["local stout", "7.50"], ["whisky shot", "6.00"]],
+        total: "31.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-07": {
+    city: "Prague",
+    currency: "USD",
+    paper: "The astronomical clock square still packs before the hourly show.",
+    why: "The clock square was the fair clue. Dinner was goulash and a half-litre of pils.",
+    funFact: "Prague's Orloj astronomical clock has drawn crowds for centuries. A half-litre of pale lager with goulash is the city's default pub order.",
+    lifeBite: "Potraviny snacks, a tram-stop trdelník, then goulash with pilsner — Old Town evening.",
+    priceContext: "Corner shop about $7; hospoda dinner about $22 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "potraviny",
+        lines: [["hermelín cheese", "2.40"], ["rohlík rolls, four", "1.20"], ["Kofola bottle", "1.60"], ["chocolate", "1.80"]],
+        total: "7.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "street stall",
+        lines: [["trdelník", "4.20"], ["mulled wine small", "3.50"]],
+        total: "7.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "hospoda",
+        lines: [["beef goulash with dumplings", "12.80"], ["pilsner, half litre", "4.20"], ["Becherovka shot", "3.40"], ["fried cheese side", "5.60"]],
+        total: "26.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-08": {
+    city: "Mumbai",
+    currency: "USD",
+    paper: "The local train still spills onto the platform before the evening tide talk.",
+    why: "The suburban local was the fair clue. Dinner was a thali and a cold Kingfisher.",
+    funFact: "Mumbai's locals move millions daily — doors often stay open between stops. A thali (many small dishes on one tray) is the city's democratic feast.",
+    lifeBite: "Irani café chai and bun maska, a vada pav lunch, then thali with Kingfisher — island-city day.",
+    priceContext: "Café stop about $3; thali dinner about $12 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "kirana shelf",
+        lines: [["banana chips", "0.80"], ["mango drink", "0.70"], ["parle-g biscuits", "0.40"], ["roasted chana", "0.60"]],
+        total: "2.50",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "street stall",
+        lines: [["vada pav", "0.60"], ["cutting chai", "0.25"], ["soda", "0.50"]],
+        total: "1.35",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "thali house",
+        lines: [["veg thali", "6.80"], ["butter chicken add-on", "4.20"], ["Kingfisher beer", "3.40"], ["sweet lassi", "1.60"]],
+        total: "16.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-09": {
+    city: "Rio de Janeiro",
+    currency: "USD",
+    paper: "The cable car still climbs the sugarloaf silhouette after the beach day.",
+    why: "The sugarloaf cable car was the fair clue. Dinner was a feijoada night and a caipirinha.",
+    funFact: "Rio's Sugarloaf cable cars have been climbing since 1912. Feijoada — black-bean stew — with a caipirinha is the weekend ritual.",
+    lifeBite: "Padaria pão de queijo, a beach biscuit lunch, then feijoada with caipirinha — carioca Saturday.",
+    priceContext: "Padaria about $5; boteco dinner about $22 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "padaria",
+        lines: [["pão de queijo, four", "2.40"], ["cafezinho", "0.90"], ["guaraná can", "1.40"]],
+        total: "4.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "beach kiosk",
+        lines: [["biscuit sandwich", "4.80"], ["água de coco", "2.20"]],
+        total: "7.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "boteco",
+        lines: [["feijoada plate", "12.50"], ["caipirinha", "5.80"], ["chopp draft", "3.40"]],
+        total: "21.70",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-10": {
+    city: "Casablanca",
+    currency: "USD",
+    paper: "The corniche still fills after Friday prayers before the Atlantic wind rises.",
+    why: "The Atlantic corniche was the fair clue. Dinner was a tagine and mint tea — or a hotel pastis.",
+    funFact: "Casablanca's Corniche faces the open Atlantic. Tagines simmer for hours; mint tea is poured from height as hospitality theatre.",
+    lifeBite: "Hanout snacks and juice, a sandwich lunch, then lamb tagine with mint tea — white-city evening.",
+    priceContext: "Hanout run about $6; restaurant dinner about $24 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "hanout",
+        lines: [["sfenj doughnuts, three", "1.40"], ["orange juice fresh", "1.80"], ["dates pack", "2.10"], ["yogurt", "0.90"]],
+        total: "6.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "snack counter",
+        lines: [["kefta sandwich", "3.80"], ["mint tea", "1.20"]],
+        total: "5.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "tagine house",
+        lines: [["lamb tagine", "14.50"], ["zaalouk salad", "3.20"], ["mint tea", "1.40"], ["hotel pastis", "6.80"]],
+        total: "25.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-11": {
+    city: "Vienna",
+    currency: "USD",
+    paper: "The giant Ferris wheel still turns over the meadow park after dark.",
+    why: "The Prater wheel was the fair clue. Dinner was schnitzel and a Grüner Veltliner.",
+    funFact: "Vienna's Riesenrad has spun over the Prater since 1897. Wiener schnitzel with a glass of Grüner Veltliner is the city's textbook plate.",
+    lifeBite: "Billa snacks, a Würstelstand lunch, then schnitzel with wine — imperial-city casual.",
+    priceContext: "Grocery nibble about $11; Beisl dinner about $38 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "grocery aisle",
+        lines: [["Manner wafers", "2.40"], ["Almdudler", "1.90"], ["Apfelstrudel pack", "3.80"], ["yogurt", "1.50"], ["bread rolls", "1.60"]],
+        total: "11.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "würstelstand",
+        lines: [["käsekrainer", "5.20"], ["Ottakringer small", "3.40"]],
+        total: "8.60",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "beisl",
+        lines: [["wiener schnitzel", "22.50"], ["Grüner Veltliner, glass", "7.80"], ["Apfelstrudel", "6.40"]],
+        total: "36.70",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-12": {
+    city: "Los Angeles, US",
+    currency: "USD",
+    paper: "The freeway exit for the Hollywood sign overlook still backs up at golden hour.",
+    why: "The overlook exit was the fair clue. Dinner was a taco truck night and a local IPA.",
+    funFact: "LA's canyon overlooks for the Hollywood sign jam at sunset. Taco trucks and craft IPAs are the city's true civic religion — not the studios.",
+    lifeBite: "Kombucha, sushi pack, and extra-hot chips, a burrito lunch, then al pastor tacos with an IPA — sprawl-city night.",
+    priceContext: "Corner market about $18; taco dinner about $25 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner market",
+        lines: [["sushi roll pack", "6.99"], ["kombucha bottle", "4.49"], ["extra-hot chips", "2.79"], ["cold brew can", "3.29"]],
+        total: "17.56",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "burrito counter",
+        lines: [["carne asada burrito", "12.50"], ["agua fresca", "3.00"]],
+        total: "15.50",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "taco truck",
+        lines: [["al pastor tacos, three", "11.25"], ["local IPA can", "6.00"], ["horchata", "3.50"], ["churros", "4.00"]],
+        total: "24.75",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-13": {
+    city: "Hanoi",
+    currency: "USD",
+    paper: "Scooters still flood the lake loop before the weekend night market opens.",
+    why: "The lake scooter loop was the fair clue. Dinner was bun cha and a bia hơi.",
+    funFact: "Hoàn Kiếm Lake is Hanoi's evening orbit. Bún chả — grilled pork with noodles — and bia hơi (fresh draught beer) are the city's cheap night out.",
+    lifeBite: "Egg coffee and dried squid from the corner, a phở lunch, then bún chả with bia hơi — Old Quarter rhythm.",
+    priceContext: "Corner shop about $5; street dinner about $8 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "corner shop",
+        lines: [["egg coffee", "1.80"], ["dried squid", "1.40"], ["shrimp chips", "0.90"], ["green tea bottle", "0.80"]],
+        total: "4.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "pho stall",
+        lines: [["phở bò", "2.40"], ["iced coffee", "1.20"]],
+        total: "3.60",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "street eatery",
+        lines: [["bún chả", "3.20"], ["nem rán, two", "1.80"], ["bia hơi, glass", "0.60"], ["ruou gao shot", "1.40"]],
+        total: "7.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-14": {
+    city: "Santiago, CL",
+    currency: "USD",
+    paper: "The funicular still climbs the city hill before the Andes turn pink.",
+    why: "The hill funicular was the fair clue. Dinner was a completo and carmenère.",
+    funFact: "San Cristóbal's funicular lifts you over Santiago toward the Andes. Completos — hot dogs loaded with avocado — and carmenère wine are local markers.",
+    lifeBite: "Minimarket snacks, a completo lunch, then asado with carmenère — valley-city evening.",
+    priceContext: "Minimarket about $7; asado dinner about $30 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "minimarket",
+        lines: [["manjar cookies", "2.10"], ["Bilz soda", "1.40"], ["nuts pack", "2.20"], ["yogurt", "1.30"]],
+        total: "7.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "fuente de soda",
+        lines: [["completo italiano", "4.80"], ["jugo natural", "2.20"]],
+        total: "7.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "asado house",
+        lines: [["asado plate", "16.50"], ["pebre and bread", "2.40"], ["carmenère, glass", "6.80"], ["pisco sour", "5.50"]],
+        total: "31.20",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-15": {
+    city: "Amsterdam",
+    currency: "USD",
+    paper: "The ring tram still crosses the canal belt before the museum quarter empties.",
+    why: "The canal-belt tram was the fair clue. Dinner was a stamppot night and jenever.",
+    funFact: "Amsterdam's canal belt is a UNESCO ring of waterways. Stamppot — mashed veg with sausage — and jenever (Dutch gin) are old-school winter comfort.",
+    lifeBite: "Albert Heijn snacks, a FEBO kroket lunch, then stamppot with jenever — lowlands evening.",
+    priceContext: "AH run about $10; brown-café dinner about $32 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "supermarket aisle",
+        lines: [["stroopwafels", "2.80"], ["hagelslag pack", "2.40"], ["apple juice", "1.90"], ["cheese slices", "2.60"]],
+        total: "9.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "automatiek",
+        lines: [["kroket", "2.80"], ["frikandel", "2.40"], ["soda", "2.20"]],
+        total: "7.40",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "brown café",
+        lines: [["stamppot with rookworst", "16.50"], ["jenever shot", "5.20"], ["local pilsner", "5.80"], ["bitterballen, five", "7.40"]],
+        total: "34.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-16": {
+    city: "Auckland",
+    currency: "USD",
+    paper: "The harbour ferry still fills before the weekend island hop.",
+    why: "The island ferry was the fair clue. Dinner was a hangi-style plate and a local sauvignon.",
+    funFact: "Auckland's ferries fan out to gulf islands from the downtown terminal. Hangi-inspired plates and Marlborough sauvignon blanc are Kiwi table staples.",
+    lifeBite: "Dairy snacks and L&P, a fish-and-chip lunch, then lamb with sauvignon — harbour-city weekend.",
+    priceContext: "Dairy run about $9; bistro dinner about $40 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "dairy shop",
+        lines: [["L&P can", "2.10"], ["pineapple lumps", "2.40"], ["cheese and crackers", "3.20"], ["fruit juice", "2.00"]],
+        total: "9.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "chippy",
+        lines: [["fish and chips", "12.80"], ["soda", "2.40"]],
+        total: "15.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "bistro",
+        lines: [["lamb rack plate", "24.50"], ["sauvignon blanc, glass", "9.80"], ["local lager", "6.40"]],
+        total: "40.70",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-17": {
+    city: "Cairo",
+    currency: "USD",
+    paper: "The Nile corniche still clogs before the evening felucca hour.",
+    why: "The Nile felucca hour was the fair clue. Dinner was koshari and a mint tea — or a hotel Stella.",
+    funFact: "Cairo's feluccas still sail the Nile at dusk for pocket change. Koshari — rice, lentils, pasta, fried onions — is the city's democratic plate.",
+    lifeBite: "Kiosk tamr hindi and biscuits, a ful sandwich lunch, then koshari with Stella — river-city night.",
+    priceContext: "Kiosk about $3; dinner about $12 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "kiosk",
+        lines: [["tamr hindi drink", "0.70"], ["dates pack", "0.90"], ["roasted seeds", "0.80"], ["biscuit pack", "0.60"]],
+        total: "3.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "ful cart",
+        lines: [["ful sandwich", "1.20"], ["tea", "0.40"]],
+        total: "1.60",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "koshari shop",
+        lines: [["koshari large", "2.80"], ["hawawshi", "2.40"], ["Stella lager", "2.60"], ["mint tea", "0.50"], ["basbousa", "1.20"]],
+        total: "9.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-18": {
+    city: "Barcelona, ES",
+    currency: "USD",
+    paper: "The grid-avenue diagonal still floods after the match lets out.",
+    why: "The diagonal avenue was the fair clue. Dinner was a vermut hour and paella for one.",
+    funFact: "Barcelona's Avinguda Diagonal cuts the Eixample grid. Vermut hour — fortified wine with olives — is the city's pre-dinner social glue.",
+    lifeBite: "Bodega snacks, a bocadillo lunch, then vermut and seafood rice — grid-city evening.",
+    priceContext: "Bodega about $9; tapas dinner about $32 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "bodega",
+        lines: [["patatas chips", "1.80"], ["cava small", "3.40"], ["olives tin", "1.60"], ["fuet stick", "2.40"]],
+        total: "9.20",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "bar de bocadillos",
+        lines: [["bocadillo de jamón", "6.50"], ["caña beer", "2.40"]],
+        total: "8.90",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "tapas bar",
+        lines: [["paella for one", "16.80"], ["vermut glass", "4.50"], ["patatas bravas", "5.20"], ["crema catalana", "5.40"]],
+        total: "31.90",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-19": {
+    city: "Toronto",
+    currency: "USD",
+    paper: "The streetcar still packs along the lakeshore before the tower lights switch.",
+    why: "The lakeshore streetcar was the fair clue. Dinner was a peameal sandwich and a local lager.",
+    funFact: "Toronto's lakeshore streetcars run past the CN Tower skyline. Peameal bacon on a bun is the city's unsung breakfast-for-dinner icon.",
+    lifeBite: "Convenience butter tarts, a shawarma lunch, then peameal with a lager — lakeshore night.",
+    priceContext: "Convenience about $9; diner dinner about $28 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "convenience aisle",
+        lines: [["butter tarts, two", "3.50"], ["ketchup chips", "2.40"], ["maple water", "2.80"]],
+        total: "8.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "shawarma counter",
+        lines: [["chicken shawarma plate", "12.50"], ["mango lassi", "3.50"]],
+        total: "16.00",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "diner",
+        lines: [["peameal bacon sandwich", "14.00"], ["local lager, pint", "8.50"], ["poutine side", "7.50"]],
+        total: "30.00",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-20": {
+    city: "Osaka",
+    currency: "USD",
+    paper: "The neon canal district still glows before the late takoyaki rush.",
+    why: "The neon canal was the fair clue. Dinner was okonomiyaki and a highball.",
+    funFact: "Osaka's Dotonbori canal is a neon food canyon. Locals call the city 'kuidaore' — eat until you drop — and takoyaki is the street mascot.",
+    lifeBite: "Konbini onigiri, a kushikatsu lunch, then okonomiyaki with a highball — kitchen-of-Japan night.",
+    priceContext: "Konbini about $6; teppan dinner about $22 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "konbini aisle",
+        lines: [["tuna mayo onigiri", "1.40"], ["karaage snack", "1.80"], ["boss coffee can", "1.20"], ["melon soda", "1.40"]],
+        total: "5.80",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "kushi counter",
+        lines: [["kushikatsu set", "8.50"], ["draft beer small", "3.20"]],
+        total: "11.70",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "teppan stall",
+        lines: [["mixed okonomiyaki", "9.80"], ["takoyaki, eight", "5.40"], ["whisky highball", "4.60"], ["sake small", "3.50"]],
+        total: "23.30",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+  "2026-10-21": {
+    city: "Bogota",
+    currency: "USD",
+    paper: "The red busway still climbs the altitude before the evening rain.",
+    why: "The TransMilenio climb was the fair clue. Dinner was ajiaco and a canelazo.",
+    funFact: "Bogotá sits at 2,600m; TransMilenio red buses are the city's spine. Ajiaco — chicken-and-potato soup — and canelazo (warm cinnamon aguardiente) fight the chill.",
+    lifeBite: "Tienda snacks and guaaraná, a tamal lunch, then ajiaco with canelazo — Andean-capital evening.",
+    priceContext: "Tienda about $5; sopa dinner about $18 USD.",
+    stages: [
+      {
+        label: "convenience",
+        shop: "tienda",
+        lines: [["achiras crackers", "1.40"], ["Colombiana soda", "1.20"], ["arequipe pack", "1.60"], ["plantain chips", "1.10"]],
+        total: "5.30",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "lunch",
+        shop: "corrientazo",
+        lines: [["tamal bogotano", "3.80"], ["agua de panela", "1.00"]],
+        total: "4.80",
+        source: "real prices · converted to USD"
+      },
+      {
+        label: "dinner",
+        shop: "sopa house",
+        lines: [["ajiaco santafereño", "9.50"], ["arepa side", "1.80"], ["canelazo", "3.40"], ["Club Colombia beer", "2.80"]],
+        total: "17.50",
+        source: "real prices · converted to USD"
+      },
+    ]
+  },
+};
+
+const KEY = "register-v5";
+const SB_URL = "https://iaurnwcjipzergycbqfp.supabase.co";
+const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhdXJud2NqaXB6ZXJneWNicWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzOTc0NTYsImV4cCI6MjEwNDk3MzQ1Nn0.qHCkDyKdWLDtmu0ixqarRZLlf4-cWRWfT6qWH26ryDU";
+function playerId() {
+  let id = localStorage.getItem("register-player");
+  if (!id) { id = (crypto.randomUUID && crypto.randomUUID()) || String(Math.random()).slice(2); localStorage.setItem("register-player", id); }
+  return id;
+}
+function reportPlay() {
+  const flag = "register-sent-" + DAY;
+  if (localStorage.getItem(flag)) return;
+  const last = state.guesses[state.guesses.length - 1];
+  fetch(SB_URL + "/rest/v1/plays", {
+    method: "POST",
+    headers: {
+      apikey: SB_ANON,
+      Authorization: "Bearer " + SB_ANON,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal"
+    },
+    body: JSON.stringify({
+      puzzle_date: DAY,
+      won: !!state.won,
+      guesses: state.guesses.length,
+      guessed_city: last ? last.name : null,
+      answer_city: P.city,
+      stage: P.stages[stageIndex(state)].label,
+      player_id: playerId()
+    })
+  }).then(r => { if (r.ok) localStorage.setItem(flag, "1"); }).catch(() => {});
+}
+
+function money(n, code) {
+  const x = Number(n);
+  return "$" + x.toFixed(2);
+}
+
+function wrongCount(st) {
+  return (st.guesses || []).filter(g => !g.ok).length;
+}
+function stageIndex(st) {
+  const w = wrongCount(st);
+  if (w >= 4) return 2;
+  if (w >= 2) return 1;
+  return 0;
+}
+
+function todayKey() {
+  const iso = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+    year: "numeric", month: "2-digit", day: "2-digit"
+  }).format(new Date()); // YYYY-MM-DD in Eastern Time
+  if (DAYS[iso]) return iso;
+  const keys = Object.keys(DAYS).sort();
+  let best = null;
+  for (const k of keys) {
+    if (k <= iso) best = k;
+    else break;
+  }
+  return best || keys[0];
+}
+
+function fmtDate(iso) {
+  const [y, m, day] = iso.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, day)).toLocaleDateString("en-US", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric", timeZone: "UTC"
+  });
+}
+
+function dist(a, b) {
+  const R = 6371, toR = x => x * Math.PI / 180;
+  const dLat = toR(b[0] - a[0]), dLon = toR(b[1] - a[1]);
+  const s = Math.sin(dLat/2)**2 + Math.cos(toR(a[0])) * Math.cos(toR(b[0])) * Math.sin(dLon/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+function findCity(name) {
+  const n = name.trim().toLowerCase();
+  if (!n) return null;
+  let hit = CITIES.find(c => c[0].toLowerCase() === n);
+  if (hit) return hit;
+  const starts = CITIES.filter(c => c[0].toLowerCase().startsWith(n));
+  if (starts.length === 1) return starts[0];
+  const inc = CITIES.filter(c => c[0].toLowerCase().includes(n));
+  if (inc.length === 1) return inc[0];
+  return null;
+}
+function suggestCities(q) {
+  const n = q.trim().toLowerCase();
+  if (!n) return [];
+  const scored = CITIES.map(c => {
+    const name = c[0].toLowerCase();
+    let score = 0;
+    if (name === n) score = 100;
+    else if (name.startsWith(n)) score = 80;
+    else if (name.includes(n)) score = 40;
+    else return null;
+    return { c, score };
+  }).filter(Boolean).sort((a,b) => b.score - a.score || a.c[0].localeCompare(b.c[0]));
+  return scored.slice(0, 12).map(x => x.c);
+}
+
+function heat(km) {
+  if (km < 1) return { t: "You got it", cls: "ok", key: "ok" };
+  if (km < 500) return { t: "Burning", cls: "hot", key: "burning" };
+  if (km < 1500) return { t: "Hot", cls: "hot", key: "hot" };
+  if (km < 3000) return { t: "Warm", cls: "hot", key: "warm" };
+  if (km < 6000) return { t: "Cold", cls: "", key: "cold" };
+  return { t: "Freezing", cls: "", key: "freezing" };
+}
+
+function fmtMi(km) {
+  const mi = km * 0.621371;
+  if (mi < 1) return "0 mi";
+  if (mi < 10) return mi.toFixed(1) + " mi";
+  return Math.round(mi).toLocaleString("en-US") + " mi";
+}
+
+function loadState(day) {
+  try {
+    const all = JSON.parse(localStorage.getItem(KEY) || "{}");
+    return all[day] || { guesses: [], done: false, won: false };
+  } catch { return { guesses: [], done: false, won: false }; }
+}
+
+function saveState(day, state) {
+  const all = JSON.parse(localStorage.getItem(KEY) || "{}");
+  all[day] = state;
+  localStorage.setItem(KEY, JSON.stringify(all));
+}
+
+function streakCount() {
+  const all = JSON.parse(localStorage.getItem(KEY) || "{}");
+  const keys = Object.keys(DAYS).sort().reverse();
+  let n = 0;
+  for (const k of keys) {
+    if (all[k] && all[k].won) n++;
+    else if (all[k] && all[k].done) break;
+    else if (k !== DAY) break;
+  }
+  return n;
+}
+
+function streakMessage() {
+  const n = streakCount();
+  if (n >= 2) return "You're on a " + n + "-day streak";
+  if (n === 1) return "You're on a 1-day streak";
+  return "Start a streak tomorrow";
+}
+
+function heatEmoji(g) {
+  if (g.ok) return "✅";
+  const map = { burning: "🔥", hot: "🌶️", warm: "🌡️", cold: "❄️", freezing: "🧊" };
+  return map[heat(g.km).key] || "🧊";
+}
+
+function shareDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return months[m - 1] + " " + d;
+}
+
+function shareText() {
+  const strip = (state.guesses || []).map(heatEmoji).join("");
+  const score = state.won ? (state.guesses.length + "/6") : "X/6";
+  return "The Register · " + shareDate(DAY) + "\n" + strip + "\n" + score + "\nhttps://playtheregister.github.io/";
+}
+
+const DAY = todayKey();
+const P = DAYS[DAY];
+const num = DAY.slice(8);
+let state = loadState(DAY);
+let resultsOpen = false;
+let justGuessed = false;
+let crowdPct = null;
+let crowdStatus = "loading"; // loading | ready | empty
+let crowdTimer = null;
+let printTimer = null;
+let printAnim = null; // WAAPI Animation or rAF handle object
+let printRafId = 0;
+let printAnimating = false;
+let printFeedStartedAt = 0;
+
+document.getElementById("dateline").textContent = fmtDate(DAY);
+
+function fetchWinrate() {
+  crowdStatus = "loading";
+  updateCrowdUI();
+  fetch(SB_URL + "/functions/v1/winrate?date=" + encodeURIComponent(DAY))
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      if (data && typeof data.solvedPct === "number" && data.solvedPct >= 0 && data.solvedPct <= 100) {
+        crowdPct = Math.round(data.solvedPct);
+        crowdStatus = "ready";
+      } else {
+        crowdPct = null;
+        crowdStatus = "empty";
+      }
+      updateCrowdUI();
+    })
+    .catch(() => {
+      crowdPct = null;
+      crowdStatus = "empty";
+      updateCrowdUI();
+    });
+}
+
+function crowdHTML() {
+  if (crowdStatus === "ready" && crowdPct !== null) {
+    return `<div class="crowd-line">${crowdPct}% of players solved today's tab</div>`;
+  }
+  return `<div class="crowd-line muted">Crowd score warming up…</div>`;
+}
+
+function updateCrowdUI() {
+  const el = document.getElementById("crowdBlock");
+  if (el) el.innerHTML = crowdHTML();
+  const printer = document.getElementById("resultsPrinter");
+  const sheet = document.getElementById("resultsSheet");
+  if (!printer || !sheet || !resultsOpen) return;
+  if (printAnimating) {
+    printer.style.height = printerTargetPx(printer, sheet) + "px";
+  } else if (printer.classList.contains("printed") && sheet.scrollHeight > printerCapPx(printer) + 1) {
+    printer.style.height = printerCapPx(printer) + "px";
+  }
+}
+
+function heatBannerHTML(g, pulse) {
+  const h = g.ok ? { t: "You got it", key: "ok" } : heat(g.km);
+  const pulseCls = pulse ? " pulse" : "";
+  return `<div class="heat-banner heat-${h.key}${pulseCls}" id="heatBanner">
+    <div class="hb-city">${g.name}</div>
+    <div class="hb-word">${h.t}</div>
+    <div class="hb-dist">${g.ok ? "That's the city" : fmtMi(g.km) + " away"}</div>
+  </div>`;
+}
+
+function renderResults() {
+  const n = state.guesses.length;
+  const headline = state.won ? "You got it" : "Close, but not today";
+  const sub = state.won
+    ? `Solved in ${n} guess${n === 1 ? "" : "es"}`
+    : `It was ${P.city} · ${n} guess${n === 1 ? "" : "es"}`;
+  const trail = state.guesses.map(g => {
+    const h = g.ok ? { t: "yes", key: "ok" } : heat(g.km);
+    return `<li class="heat-${h.key}"><strong>${g.name}</strong> — ${g.ok ? "yes" : h.t}${g.ok ? "" : " · " + fmtMi(g.km)}</li>`;
+  }).join("");
+
+  document.getElementById("resultsSheet").innerHTML = `
+    <div class="receipt-tab-head">
+      <div class="receipt-tab-stars">*** FINAL TAB ***</div>
+      <div class="receipt-tab-date">${fmtDate(DAY)}</div>
+    </div>
+    <div class="receipt-cut" aria-hidden="true"></div>
+    <div class="print-status-wrap"><span class="print-status" id="printStatus">PRINTING</span></div>
+    <div class="results-kicker">Final results</div>
+    <h2 class="results-headline ${state.won ? "win" : "lose"}">${headline}</h2>
+    <p class="results-sub">${sub}</p>
+    <p class="streak-soft">${streakMessage()}</p>
+
+    <div class="results-block">
+      <h3>Your score</h3>
+      <ul class="results-trail">${trail}</ul>
+      <div class="share" id="share">${shareText()}</div>
+      <button class="go" type="button" id="copyBtn">Copy the score</button>
+    </div>
+
+    <div class="results-block">
+      <h3>Crowd</h3>
+      <div id="crowdBlock">${crowdHTML()}</div>
+    </div>
+
+    <div class="results-block city-card">
+      <h3>Today's city</h3>
+      <div class="city-name">${P.city}</div>
+      <div class="fact"><span class="label">Fun fact</span>${P.funFact}</div>
+      <div class="fact"><span class="label">Life bite</span>${P.lifeBite}</div>
+      <div class="fact"><span class="label">Price context</span>${P.priceContext}</div>
+      <p style="margin:8px 0 0;font-size:14px;color:var(--muted)">${P.why}</p>
+    </div>
+
+    <div class="results-actions">
+      <button class="ghost" type="button" id="backToTab">Back to today's tab</button>
+      <button class="ghost replay-print" type="button" id="replayPrint" hidden>Replay print</button>
+    </div>
+  `;
+
+  const cb = document.getElementById("copyBtn");
+  if (cb) cb.onclick = copyShare;
+  const back = document.getElementById("backToTab");
+  if (back) back.onclick = () => hideResults();
+  const replay = document.getElementById("replayPrint");
+  if (replay) replay.onclick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    replayPrint();
+  };
+  updateReplayPrintBtn();
+}
+
+function printSeenKey() {
+  return "register-print-seen-v4-" + DAY;
+}
+function hasSeenPrint() {
+  try { return !!localStorage.getItem(printSeenKey()); } catch (e) { return false; }
+}
+function markPrintSeen() {
+  try { localStorage.setItem(printSeenKey(), "1"); } catch (e) {}
+}
+function clearPrintSeen() {
+  try { localStorage.removeItem(printSeenKey()); } catch (e) {}
+}
+function updateReplayPrintBtn() {
+  const btn = document.getElementById("replayPrint");
+  if (!btn) return;
+  const show = resultsOpen && !printAnimating;
+  btn.hidden = !show;
+  btn.disabled = !show;
+}
+function replayPrint() {
+  if (!resultsOpen || printAnimating) return;
+  clearPrintSeen();
+  startPrintFeed({ force: true });
+}
+
+function printerCapPx(printer) {
+  if (!printer) return Math.floor(window.innerHeight * 0.75);
+  const mh = getComputedStyle(printer).maxHeight;
+  const n = parseFloat(mh);
+  if (mh && mh !== "none" && !isNaN(n) && n > 0) return n;
+  return Math.max(220, Math.floor(window.innerHeight * 0.75));
+}
+
+function printerTargetPx(printer, sheet) {
+  const cap = printerCapPx(printer);
+  const need = sheet ? sheet.scrollHeight : cap;
+  return Math.max(0, Math.min(need, cap));
+}
+
+function setResultsScrollLock(on) {
+  document.documentElement.style.overflow = on ? "hidden" : "";
+  document.body.style.overflow = on ? "hidden" : "";
+}
+
+function cancelPrintMotion() {
+  if (printTimer) { clearTimeout(printTimer); printTimer = null; }
+  if (printRafId) { cancelAnimationFrame(printRafId); printRafId = 0; }
+  if (printAnim) {
+    try { printAnim.cancel(); } catch (e) {}
+    printAnim = null;
+  }
+  const sheet = document.getElementById("resultsSheet");
+  if (sheet && sheet.getAnimations) {
+    try { sheet.getAnimations().forEach(a => a.cancel()); } catch (e) {}
+  }
+}
+
+function finishPrint(instant) {
+  const overlay = document.getElementById("results");
+  const printer = document.getElementById("resultsPrinter");
+  const sheet = document.getElementById("resultsSheet");
+  const status = document.getElementById("printStatus");
+  const skipBtn = document.getElementById("printSkip");
+  cancelPrintMotion();
+  printAnimating = false;
+  if (overlay) overlay.classList.remove("is-printing");
+  if (!printer || !sheet) return;
+  const target = printerTargetPx(printer, sheet);
+  if (instant) printer.classList.add("instant");
+  sheet.style.transition = "none";
+  sheet.style.transform = "";
+  sheet.classList.add("is-feeding", "is-printed");
+  printer.style.height = target + "px";
+  void printer.offsetHeight;
+  printer.classList.add("printed");
+  // Cap + internal scroll when content taller than viewport
+  if (sheet.scrollHeight > printerCapPx(printer) + 1) {
+    printer.style.height = printerCapPx(printer) + "px";
+  } else {
+    printer.style.height = "auto";
+  }
+  printer.classList.remove("instant");
+  if (status) {
+    status.textContent = "PRINTED";
+    status.classList.add("show");
+  }
+  if (skipBtn) skipBtn.hidden = true;
+  markPrintSeen();
+  updateReplayPrintBtn();
+}
+
+function startPrintFeed(opts) {
+  opts = opts || {};
+  const overlay = document.getElementById("results");
+  const printer = document.getElementById("resultsPrinter");
+  const sheet = document.getElementById("resultsSheet");
+  const status = document.getElementById("printStatus");
+  const skipBtn = document.getElementById("printSkip");
+  if (!printer || !sheet) return;
+  cancelPrintMotion();
+
+  printer.classList.remove("printed", "instant");
+  sheet.classList.remove("is-feeding", "is-printed");
+  sheet.style.transition = "none";
+  sheet.style.transform = "";
+  // Skip only if already seen today AND not forcing (Replay always forces).
+  // Do NOT hard-skip for prefers-reduced-motion — PC OS animation prefs were killing the spit.
+  const skip = !opts.force && hasSeenPrint();
+  if (skip) {
+    printAnimating = false;
+    if (overlay) overlay.classList.remove("is-printing");
+    printer.classList.add("instant");
+    sheet.classList.add("is-feeding", "is-printed");
+    printer.classList.add("printed");
+    if (sheet.scrollHeight > printerCapPx(printer) + 1) {
+      printer.style.height = printerCapPx(printer) + "px";
+    } else {
+      printer.style.height = "auto";
+    }
+    if (status) {
+      status.textContent = "PRINTED";
+      status.classList.add("show");
+    }
+    if (skipBtn) skipBtn.hidden = true;
+    markPrintSeen();
+    updateReplayPrintBtn();
+    return;
+  }
+
+  printAnimating = true;
+  printFeedStartedAt = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+  if (overlay) overlay.classList.add("is-printing");
+  if (skipBtn) skipBtn.hidden = false;
+  updateReplayPrintBtn();
+  // Clip height BEFORE measuring sheet / starting transform (Chromium Windows reliability)
+  printer.style.height = printerTargetPx(printer, sheet) + "px";
+  void printer.offsetHeight;
+  if (status) {
+    status.textContent = "PRINTING";
+    status.classList.add("show");
+  }
+  // Drive spit with WAAPI (or rAF) — CSS transitions are muted on some Windows configs
+  const spitMs = 3400;
+  const spitEase = "cubic-bezier(0.22, 0.61, 0.36, 1)";
+  sheet.classList.remove("is-feeding", "is-printed");
+  const h = Math.max(1, sheet.offsetHeight);
+  const from = "translate3d(0, -" + h + "px, 0)";
+  const to = "translate3d(0, 0, 0)";
+  sheet.style.transition = "none";
+  sheet.style.transform = from;
+  void sheet.offsetHeight;
+  sheet.classList.add("is-feeding");
+
+  const runRafFeed = () => {
+    const t0 = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+    const step = (now) => {
+      if (!printAnimating) return;
+      const t = Math.min(1, (now - t0) / spitMs);
+      // approximate cubic-bezier(0.22, 0.61, 0.36, 1) with ease-out cubic
+      const e = 1 - Math.pow(1 - t, 3);
+      const y = -h * (1 - e);
+      sheet.style.transform = "translate3d(0, " + y + "px, 0)";
+      if (t < 1) {
+        printRafId = requestAnimationFrame(step);
+      } else {
+        printRafId = 0;
+        finishPrint(false);
+      }
+    };
+    printRafId = requestAnimationFrame(step);
+  };
+
+  if (typeof sheet.animate === "function") {
+    try {
+      printAnim = sheet.animate(
+        [{ transform: from }, { transform: to }],
+        { duration: spitMs, easing: spitEase, fill: "forwards" }
+      );
+      printAnim.onfinish = () => { if (printAnimating) finishPrint(false); };
+      printAnim.oncancel = () => {};
+    } catch (err) {
+      printAnim = null;
+      runRafFeed();
+    }
+  } else {
+    runRafFeed();
+  }
+}
+
+function skipPrintFeed() {
+  if (!printAnimating) return;
+  finishPrint(true);
+}
+
+function showResults(opts) {
+  opts = opts || {};
+  resultsOpen = true;
+  renderResults();
+  const overlay = document.getElementById("results");
+  overlay.hidden = false;
+  setResultsScrollLock(true);
+  startPrintFeed();
+  fetchWinrate();
+  if (crowdTimer) clearTimeout(crowdTimer);
+  // Refresh once so this player's finish is more likely included
+  crowdTimer = setTimeout(fetchWinrate, opts.delayRefresh || 1800);
+}
+
+function hideResults() {
+  resultsOpen = false;
+  cancelPrintMotion();
+  printAnimating = false;
+  const overlay = document.getElementById("results");
+  const printer = document.getElementById("resultsPrinter");
+  const sheet = document.getElementById("resultsSheet");
+  if (overlay) {
+    overlay.hidden = true;
+    overlay.classList.remove("is-printing");
+  }
+  if (printer) {
+    printer.classList.remove("printed", "instant");
+    printer.style.height = "";
+  }
+  if (sheet) {
+    sheet.classList.remove("is-feeding", "is-printed");
+    sheet.style.transform = "";
+    sheet.style.transition = "none";
+  }
+  setResultsScrollLock(false);
+  render();
+}
+
+function render() {
+  document.getElementById("streak").textContent = streakCount() ? (`streak ${streakCount()}`) : "";
+  const S = P.stages[stageIndex(state)];
+  const rows = S.lines.map(([n, p]) => `<div class="row"><span>${n}</span><span>${money(p, P.currency)}</span></div>`).join("");
+  const lastIdx = state.guesses.length - 1;
+  const log = state.guesses.map((g, i) => {
+    const h = g.ok ? { t: "yes", key: "ok" } : heat(g.km);
+    const latest = (i === lastIdx && justGuessed) ? " latest" : "";
+    return `<li class="heat-${h.key}${latest}"><strong>${g.name}</strong> — ${g.ok ? "yes" : h.t}${g.ok ? "" : " · " + fmtMi(g.km)}</li>`;
+  }).join("");
+
+  let banner = "";
+  if (state.guesses.length && !state.done) {
+    banner = heatBannerHTML(state.guesses[lastIdx], justGuessed);
+  } else if (state.guesses.length && state.done && justGuessed && state.won) {
+    // Brief win flash stays on tab until Results takes over
+    banner = heatBannerHTML(state.guesses[lastIdx], true);
+  }
+
+  let end = "";
+  if (state.done) {
+    end = `<div class="end-bar">
+      <p class="msg ${state.won ? "ok" : ""}">${state.won ? "You got it." : "It was " + P.city + "."}</p>
+      <button class="go" type="button" id="openResultsBtn">Final results</button>
+    </div>`;
+  }
+
+  const left = 6 - state.guesses.length;
+  document.getElementById("game").innerHTML = `
+    <p class="lede">Read the tip. Read the tab. Guess the city. Two misses unlock lunch. Two more unlock dinner with a drink.</p>
+    <div class="tip"><div class="kicker">Tip</div><div class="body">${P.paper}</div></div>
+    <div class="stage">${S.label}</div>
+    <div class="receipt">
+      <div class="shop">${S.shop}</div>
+      ${rows}
+      <div class="row total"><span>total</span><span>${money(S.total, P.currency)}</span></div>
+    </div>
+    ${state.done ? "" : `
+      <div class="guess-wrap"><div class="guess-box">
+        <label for="city">Guess the city</label>
+        <input id="city" type="text" inputmode="text" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="Type any city" />
+        <ul class="suggestions" id="suggestions"></ul>
+        <div class="err" id="guessErr"></div>
+        <button class="go" type="button" id="guessBtn">${left} left</button>
+      </div></div>
+    `}
+    ${banner}
+    <ul class="log">${log}</ul>
+    ${end}
+  `;
+  wireGuess();
+  const orb = document.getElementById("openResultsBtn");
+  if (orb) orb.onclick = () => showResults();
+  // consume pulse flag after paint
+  if (justGuessed) {
+    setTimeout(() => { justGuessed = false; }, 600);
+  }
+}
+
+function wireGuess() {
+  const input = document.getElementById("city");
+  const box = document.getElementById("suggestions");
+  const btn = document.getElementById("guessBtn");
+  if (!input) return;
+  const paint = () => {
+    const list = suggestCities(input.value);
+    box.innerHTML = list.map(c => `<li data-city="${c[0]}">${c[0]}</li>`).join("");
+    [...box.querySelectorAll("li")].forEach(li => {
+      li.addEventListener("click", () => {
+        input.value = li.dataset.city;
+        box.innerHTML = "";
+        guessCity();
+      });
+    });
+  };
+  input.addEventListener("input", () => {
+    const err = document.getElementById("guessErr");
+    if (err) err.textContent = "";
+    paint();
+  });
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); guessCity(); }
+  });
+  if (btn) btn.onclick = guessCity;
+  const coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  if (!coarse) input.focus({ preventScroll: true });
+  else setTimeout(() => input.scrollIntoView({ block: "nearest", behavior: "smooth" }), 50);
+}
+
+function guessCity() {
+  if (state.done) return;
+  const input = document.getElementById("city");
+  const err = document.getElementById("guessErr");
+  if (!input) return;
+  const hit = findCity(input.value);
+  if (!hit) {
+    if (err) err.textContent = "Pick a city from the suggestions, or type the full name.";
+    return;
+  }
+  if (state.guesses.some(g => g.name === hit[0])) {
+    if (err) err.textContent = "Already guessed that one.";
+    return;
+  }
+  const ans = CITIES.find(c => c[0] === P.city);
+  const km = dist([hit[1], hit[2]], [ans[1], ans[2]]);
+  const ok = hit[0] === P.city;
+  state.guesses.push({ name: hit[0], km, ok });
+  justGuessed = true;
+  if (ok || state.guesses.length >= 6) {
+    state.done = true;
+    state.won = ok;
+  }
+  saveState(DAY, state);
+  if (state.done) {
+    reportPlay();
+    render();
+    // On win: brief green flash, then Results. On lose: open Results shortly after.
+    const delay = state.won ? 900 : 500;
+    setTimeout(() => showResults({ delayRefresh: 1800 }), delay);
+  } else {
+    render();
+  }
+}
+
+function copyShare() {
+  const el = document.getElementById("share");
+  const t = el ? el.textContent : shareText();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).catch(() => selectShare());
+  } else selectShare();
+}
+function selectShare() {
+  const el = document.getElementById("share");
+  if (!el) return;
+  const r = document.createRange(); r.selectNodeContents(el);
+  const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+
+const resultsEl = document.getElementById("results");
+let printTouchMoved = false;
+resultsEl.addEventListener("pointerdown", () => { printTouchMoved = false; }, { passive: true });
+resultsEl.addEventListener("pointermove", (e) => {
+  if (e.pointerType === "touch" || e.pointerType === "pen") printTouchMoved = true;
+}, { passive: true });
+resultsEl.addEventListener("click", (e) => {
+  if (!printAnimating) return;
+  if (printTouchMoved) return;
+  const now = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
+  if (now - printFeedStartedAt < 180) return; // ignore same click that opened Replay / Results
+  if (
+    e.target.closest("button") ||
+    e.target.closest("a") ||
+    e.target.closest("#share") ||
+    e.target.closest(".replay-print") ||
+    e.target.closest(".share")
+  ) return;
+  skipPrintFeed();
+});
+const printSkipBtn = document.getElementById("printSkip");
+if (printSkipBtn) {
+  printSkipBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    skipPrintFeed();
+  });
+}
+window.addEventListener("resize", () => {
+  if (!resultsOpen) return;
+  const printer = document.getElementById("resultsPrinter");
+  const sheet = document.getElementById("resultsSheet");
+  if (!printer || !sheet) return;
+  if (printAnimating) {
+    printer.style.height = printerTargetPx(printer, sheet) + "px";
+  } else if (printer.classList.contains("printed")) {
+    if (sheet.scrollHeight > printerCapPx(printer) + 1) {
+      printer.style.height = printerCapPx(printer) + "px";
+    } else {
+      printer.style.height = "auto";
+    }
+  }
+});
+
+const help = document.getElementById("help");
+document.getElementById("helpOpen").onclick = () => { help.hidden = false; };
+document.getElementById("helpClose").onclick = () => {
+  help.hidden = true;
+  localStorage.setItem(KEY + "-helped-v10", "1");
+};
+if (!localStorage.getItem(KEY + "-helped-v10")) help.hidden = false;
+
+render();
+// Returning player who already finished: open Results as primary
+if (state.done) {
+  showResults({ delayRefresh: 1200 });
+}
+</script>
+</body>
+</html>
