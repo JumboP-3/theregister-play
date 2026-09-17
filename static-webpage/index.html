@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>The Register</title>
-<!-- pages-bust: et-todayKey-2026-09-15-reykjavik-calendar-v12 -->
+<!-- pages-bust: southpole-prank-2026-09-16-v7 -->
 <meta name="description" content="One stranger's receipt. One tip. 6 tries. Hotter or colder. Can you beat the crowd?" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="The Register" />
@@ -756,34 +756,35 @@ const DAYS = {
     ]
   },
   "2026-09-16": {
-    city: "Madrid",
+    // TEMP prank for John's sister — revert to Madrid later
+    city: "South Pole",
     currency: "USD",
-    paper: "The cercanías still jammed before kickoff — take the metro if you can.",
-    why: "The cercanías crush was the fair clue. Dinner was tapas and a caña.",
-    funFact: "Madrid's cercanías and metro keep the derby and late-night bar crawl moving. A menú del día and a cold caña are still the city's everyday rhythm.",
-    lifeBite: "Corner-shop Spanish staples in the morning, a menú del día at lunch, then tortilla and a caña at a neighborhood bar — classic Madrileño cadence.",
-    priceContext: "Corner shop about $12; tapas dinner with a caña about $22 USD.",
+    paper: "The flag still snaps in the katabatic wind at 90°S. Bring a spare glove.",
+    why: "The 90°S flag was the fair clue. Dinner was freeze-dried chili under the polar night.",
+    funFact: "Amundsen–Scott South Pole Station sits on nearly two miles of ice. In winter the sun never rises — and the 'corner store' is a cargo crate.",
+    lifeBite: "A stash-run of energy bars and hot cocoa packets, a galley grilled cheese at 'noon,' then freeze-dried chili with powdered cider — luxury is relative at −60°F.",
+    priceContext: "Totally made-up polar prices for fun. Station shop about $28; galley dinner about $19 USD.",
     stages: [
       {
         label: "convenience",
-        shop: "corner shop",
-        lines: [["gazpacho brick", "2.40"], ["patatas fritas bag", "1.65"], ["jamón serrano pack", "4.85"], ["Aquarius, bottle", "1.90"], ["Magnum classic", "2.15"]],
-        total: "12.95",
-        source: "real prices · converted to USD"
+        shop: "station crate shop",
+        lines: [["protein bars, three", "9.50"], ["hot cocoa packets, ten", "6.20"], ["hand warmers, box", "7.80"], ["ChapStick, arctic edition", "4.10"]],
+        total: "27.60",
+        source: "made up · polar silliness"
       },
       {
         label: "lunch",
-        shop: "menú del día",
-        lines: [["menú del día", "14.20"], ["café con leche", "1.85"]],
-        total: "16.05",
-        source: "real prices · converted to USD"
+        shop: "station galley",
+        lines: [["grilled cheese", "8.40"], ["tomato soup cup", "4.25"], ["coffee, endless", "2.10"]],
+        total: "14.75",
+        source: "made up · polar silliness"
       },
       {
         label: "dinner",
-        shop: "bar de barrio",
-        lines: [["tortilla de patatas", "8.50"], ["jamón plate, small", "7.20"], ["caña", "2.80"], ["aceitunas", "2.40"]],
-        total: "20.90",
-        source: "real prices · converted to USD"
+        shop: "polar night mess",
+        lines: [["freeze-dried chili", "11.90"], ["powdered cider", "3.40"], ["shared brownie brick", "3.80"]],
+        total: "19.10",
+        source: "made up · polar silliness"
       },
     ]
   },
@@ -1910,7 +1911,7 @@ const DAYS = {
   },
 };
 
-const KEY = "register-v6";
+const KEY = "register-v7-southpole";
 const SB_URL = "https://iaurnwcjipzergycbqfp.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlhdXJud2NqaXB6ZXJneWNicWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzOTc0NTYsImV4cCI6MjEwNDk3MzQ1Nn0.qHCkDyKdWLDtmu0ixqarRZLlf4-cWRWfT6qWH26ryDU";
 function playerId() {
@@ -2098,7 +2099,7 @@ if (/[?&]reset=1(?:&|$)/.test(location.search || "")) {
     localStorage.removeItem(KEY);
     localStorage.removeItem("register-v5");
     localStorage.removeItem("register-print-seen-v4-" + DAY);
-    localStorage.removeItem("register-print-seen-v6-" + DAY);
+    localStorage.removeItem("register-print-seen-v7-" + DAY);
   } catch (e) {}
   location.replace(location.href.split("?")[0]);
 }
@@ -2232,7 +2233,7 @@ function renderResults() {
 }
 
 function printSeenKey() {
-  return "register-print-seen-v6-" + DAY;
+  return "register-print-seen-v7-" + DAY;
 }
 function hasSeenPrint() {
   try { return !!localStorage.getItem(printSeenKey()); } catch (e) { return false; }
